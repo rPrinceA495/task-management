@@ -2,7 +2,7 @@ import * as ProjectActions from '../actions/ProjectActions';
 
 const initialState = {
   isLoading: false,
-  items: null
+  items: null,
 };
 
 export default function projectTemplates(state = initialState, action) {

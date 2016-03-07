@@ -12,13 +12,13 @@ const ProjectService = {
     }
     const tasks = await projectTemplate.getTasks();
     return await db.Project.create({
-        name: project.name,
-        tasks: tasks.map(task => ({
-          name: task.name,
-          position: task.position
-        }))
+      name: project.name,
+      tasks: tasks.map(task => ({
+        name: task.name,
+        position: task.position,
+      })),
     }, {
-      include: [ db.Task ]
+      include: [db.Task],
     });
   },
 
@@ -28,7 +28,7 @@ const ProjectService = {
 
   async getProjectTemplates() {
     return await db.ProjectTemplate.findAll();
-  }
+  },
 };
 
 export default ProjectService;

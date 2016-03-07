@@ -2,7 +2,7 @@ import * as ProjectActions from '../actions/ProjectActions';
 
 const initialState = {
   isLoading: false,
-  items: null
+  items: null,
 };
 
 export default function projects(state = initialState, action) {
@@ -17,7 +17,7 @@ export default function projects(state = initialState, action) {
       return state;
       // return { ...state, items: [ ...state.items, action.project ] };
     case ProjectActions.CREATE_PROJECT_SUCCESS:
-      return { ...state, items: [ ...state.items, action.result ] };
+      return { ...state, items: [...state.items, action.result] };
     case ProjectActions.CREATE_PROJECT_FAILURE:
       return state;
     default:

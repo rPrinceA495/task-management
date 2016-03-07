@@ -11,7 +11,7 @@ const TeamService = {
 
   async deleteTeam(teamID) {
 
-  }
+  },
 };
 
 export default TeamService;

@@ -1,4 +1,3 @@
-import http from 'http';
 import koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import hbs from 'koa-hbs';
@@ -9,7 +8,6 @@ import webpackDevMiddleware from 'koa-webpack-dev-middleware';
 import webpackHotMiddleware from 'koa-webpack-hot-middleware';
 import webpackConfig from '../client/webpack.config';
 import path from 'path';
-import db from './db';
 
 async function run() {
   const app = koa();
@@ -24,7 +22,7 @@ async function run() {
   });
 
   app.use(hbs.middleware({
-    viewPath: path.join(__dirname, 'views')
+    viewPath: path.join(__dirname, 'views'),
   }));
 
   app.use(bodyParser());

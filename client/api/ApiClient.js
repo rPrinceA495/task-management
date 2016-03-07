@@ -17,7 +17,7 @@ const ApiClient = {
 
   deleteProject(projectID) {
     return axios.delete(`/projects/${projectID}`);
-  }
+  },
 };
 
 export default ApiClient;

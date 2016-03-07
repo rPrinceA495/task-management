@@ -7,7 +7,7 @@ const sequelize = new Sequelize(
   config.db.password, {
     ...config.db.options,
     define: {
-    }
+    },
   }
 );
 
@@ -15,42 +15,42 @@ const Task = sequelize.define('task', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
   },
   name: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
   },
   position: {
     type: Sequelize.INTEGER,
-    allowNull: false
-  }
+    allowNull: false,
+  },
 });
 
 const ProjectTemplate = sequelize.define('projectTemplate', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
   },
   name: {
     type: Sequelize.STRING,
-    allowNull: false
-  }
+    allowNull: false,
+  },
 }, {
-  tableName: 'project_templates'
+  tableName: 'project_templates',
 });
 
 const Project = sequelize.define('project', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
   },
   name: {
     type: Sequelize.STRING,
-    allowNull: false
-  }
+    allowNull: false,
+  },
 });
 
 Task.belongsToMany(ProjectTemplate, { through: 'project_template_tasks' });
@@ -63,7 +63,7 @@ const db = {
   sequelize,
   Task,
   ProjectTemplate,
-  Project
+  Project,
 };
 
 export default db;

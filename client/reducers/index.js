@@ -4,7 +4,7 @@ import projects from './projects';
 
 const rootReducer = combineReducers({
   projectTemplates,
-  projects
+  projects,
 });
 
 export default rootReducer;
