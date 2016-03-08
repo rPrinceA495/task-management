@@ -10,7 +10,7 @@ export default function projectTemplates(state = initialState, action) {
     case ProjectActions.LOAD_PROJECT_TEMPLATES_REQUEST:
       return { ...state, isLoading: true };
     case ProjectActions.LOAD_PROJECT_TEMPLATES_SUCCESS:
-      return { ...state, items: action.result, isLoading: false };
+      return { ...state, items: action.templates, isLoading: false };
     case ProjectActions.LOAD_PROJECT_TEMPLATES_FAILURE:
       return { ...state, isLoading: false };
     default:

@@ -14,7 +14,7 @@ export function loadProjectTemplates() {
     dispatch({ type: LOAD_PROJECT_TEMPLATES_REQUEST });
     return ApiClient
       .getProjectTemplates()
-      .then(result => dispatch({ type: LOAD_PROJECT_TEMPLATES_SUCCESS, result }))
+      .then(result => dispatch({ type: LOAD_PROJECT_TEMPLATES_SUCCESS, templates: result }))
       .catch(error => dispatch({ type: LOAD_PROJECT_TEMPLATES_FAILURE, error }));
   };
 }
@@ -33,7 +33,7 @@ export function loadProjects() {
     dispatch({ type: LOAD_PROJECTS_REQUEST });
     return ApiClient
       .getProjects()
-      .then(result => dispatch({ type: LOAD_PROJECTS_SUCCESS, result }))
+      .then(result => dispatch({ type: LOAD_PROJECTS_SUCCESS, projects: result }))
       .catch(error => dispatch({ type: LOAD_PROJECTS_FAILURE, error }));
   };
 }
@@ -44,11 +44,24 @@ export const CREATE_PROJECT_FAILURE = 'CREATE_PROJECT_FAILURE';
 
 export function createProject(project) {
   return dispatch => {
-    // dispatch({ type: CREATE_PROJECT_REQUEST, project });
-
+    dispatch({ type: CREATE_PROJECT_REQUEST, project });
     return ApiClient
       .createProject(project)
-      .then(result => dispatch({ type: CREATE_PROJECT_SUCCESS, result }))
+      .then(result => dispatch({ type: CREATE_PROJECT_SUCCESS, project: result }))
       .catch(error => dispatch({ type: CREATE_PROJECT_FAILURE, error }));
+  };
+}
+
+export const DELETE_PROJECT_REQUEST = 'DELETE_PROJECT_REQUEST';
+export const DELETE_PROJECT_SUCCESS = 'DELETE_PROJECT_SUCCESS';
+export const DELETE_PROJECT_FAILURE = 'DELETE_PROJECT_FAILURE';
+
+export function deleteProject(projectId) {
+  return dispatch => {
+    dispatch({ type: DELETE_PROJECT_REQUEST, projectId });
+    return ApiClient
+      .deleteProject(projectId)
+      .then(() => dispatch({ type: DELETE_PROJECT_SUCCESS, projectId }))
+      .catch(error => dispatch({ type: DELETE_PROJECT_FAILURE, projectId, error }));
   };
 }

@@ -5,15 +5,18 @@ import Task from './Task.jsx';
 
 export default class Project extends React.Component {
   static propTypes = {
-    project: React.PropTypes.object
+    project: React.PropTypes.object.isRequired,
+    projectActions: React.PropTypes.object.isRequired,
   };
 
-  handleEditClick() {
-
+  constructor(props) {
+    super(props);
+    this.handleDeleteClick = ::this.handleDeleteClick;
   }
 
-  handleDeleteClick() {
-
+  handleDeleteClick(event) {
+    event.preventDefault();
+    this.props.projectActions.deleteProject(this.props.project.id);
   }
 
   renderDropdown() {
@@ -25,10 +28,10 @@ export default class Project extends React.Component {
             size="lg"/>
         </SafeAnchor>
         <Dropdown.Menu>
-          <MenuItem onClick={() => this.handleEditClick()}>
+          <MenuItem>
             <Icon name="pencil" fixedWidth /> Edit
           </MenuItem>
-          <MenuItem onClick={() => this.handleDeleteClick()}>
+          <MenuItem onClick={this.handleDeleteClick}>
             <Icon name="trash" fixedWidth /> Delete
           </MenuItem>
         </Dropdown.Menu>

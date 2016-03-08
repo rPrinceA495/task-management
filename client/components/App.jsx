@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Navbar, Grid, Row, Col, Button, Nav, NavItem } from 'react-bootstrap';
 import Icon from 'react-fa';
 import Project from './Project.jsx';
@@ -19,8 +20,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.props.loadProjectTemplates();
-    this.props.loadProjects();
+    this.props.projectActions.loadProjectTemplates();
+    this.props.projectActions.loadProjects();
   }
 
   handleCreateProjectButtonClick() {
@@ -31,7 +32,7 @@ class App extends React.Component {
 
   handleProjectSave(project) {
     this.hideProjectModal();
-    this.props.createProject(project);
+    this.props.projectActions.createProject(project);
   }
 
   hideProjectModal() {
@@ -73,7 +74,8 @@ class App extends React.Component {
           {this.props.projects.items.map(project =>
             <Project
               key={project.id}
-              project={project} />
+              project={project}
+              projectActions={this.props.projectActions} />
           )}
 
       </div>
@@ -102,8 +104,14 @@ class App extends React.Component {
 function mapStateToProps(state) {
   return {
     projectTemplates: state.projectTemplates,
-    projects: state.projects
+    projects: state.projects,
   };
 }
 
-export default connect(mapStateToProps, ProjectActions)(App);
+function mapDispatchToProps(dispatch) {
+  return {
+    projectActions: bindActionCreators(ProjectActions, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
