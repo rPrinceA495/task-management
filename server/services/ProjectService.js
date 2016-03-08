@@ -6,7 +6,7 @@ const ProjectService = {
   },
 
   async createProject(project) {
-    const projectTemplate = await db.ProjectTemplate.findById(project.projectTemplateId);
+    const projectTemplate = await db.Project.findById(project.projectTemplateId);
     if (!projectTemplate) {
       throw new Error(`Cannot find project template with id = ${project.projectTemplateId}.`);
     }
@@ -23,11 +23,10 @@ const ProjectService = {
   },
 
   async deleteProject(projectID) {
-
-  },
-
-  async getProjectTemplates() {
-    return await db.ProjectTemplate.findAll();
+    const project = await db.Project.findById(projectID);
+    if (project) {
+      await project.destroy();
+    }
   },
 };
 

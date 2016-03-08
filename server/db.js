@@ -11,6 +11,26 @@ const sequelize = new Sequelize(
   }
 );
 
+const Project = sequelize.define('project', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: Sequelize.TEXT,
+  },
+  isTemplate: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+});
+
 const Task = sequelize.define('task', {
   id: {
     type: Sequelize.INTEGER,
@@ -27,43 +47,15 @@ const Task = sequelize.define('task', {
   },
 });
 
-const ProjectTemplate = sequelize.define('projectTemplate', {
-  id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-}, {
-  tableName: 'project_templates',
+Project.hasMany(Task, {
+  foreignKey: { allowNull: false },
+  onDelete: 'CASCADE',
 });
-
-const Project = sequelize.define('project', {
-  id: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-});
-
-Task.belongsToMany(ProjectTemplate, { through: 'project_template_tasks' });
-ProjectTemplate.belongsToMany(Task, { through: 'project_template_tasks' });
-
-Task.belongsToMany(Project, { through: 'project_tasks' });
-Project.belongsToMany(Task, { through: 'project_tasks' });
 
 const db = {
   sequelize,
-  Task,
-  ProjectTemplate,
   Project,
+  Task,
 };
 
 export default db;

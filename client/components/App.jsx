@@ -20,7 +20,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.props.projectActions.loadProjectTemplates();
     this.props.projectActions.loadProjects();
   }
 
@@ -42,7 +41,7 @@ class App extends React.Component {
   }
 
   isLoading() {
-    return this.props.projectTemplates.isLoading || this.props.projects.isLoading;
+    return this.props.projects.isLoading;
   }
 
   renderLoader() {
@@ -66,17 +65,20 @@ class App extends React.Component {
             <Icon name="plus" /> Create Project
           </Button>
           <EditProjectModal
-            projectTemplates={this.props.projectTemplates.items}
+            projectTemplates={this.props.projects.items.filter(project => project.isTemplate)}
             show={this.state.showProjectModal}
             onSave={this.handleProjectSave}
             onHide={this.hideProjectModal} />
 
-          {this.props.projects.items.map(project =>
-            <Project
-              key={project.id}
-              project={project}
-              projectActions={this.props.projectActions} />
-          )}
+          {this.props.projects.items
+            .filter(project => !project.isTemplate)
+            .map(project =>
+              <Project
+                key={project.id}
+                project={project}
+                projectActions={this.props.projectActions} />
+            )
+          }
 
       </div>
     );
@@ -103,7 +105,6 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    projectTemplates: state.projectTemplates,
     projects: state.projects,
   };
 }
