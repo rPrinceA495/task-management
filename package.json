@@ -34,7 +34,8 @@
     "react-fa": "^4.0.0",
     "react-loader": "^2.0.0",
     "sequelize": "^3.19.3",
-    "mysql": "^2.10.2"
+    "mysql": "^2.10.2",
+    "babel-polyfill": "^6.6.1"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",

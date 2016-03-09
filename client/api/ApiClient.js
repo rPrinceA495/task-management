@@ -3,20 +3,18 @@ import Axios from 'axios';
 const axios = Axios.create({ baseURL: '/api' });
 
 const ApiClient = {
-  getProjectTemplates() {
-    return axios.get('/project_templates').then(response => response.data);
+  async getProjects() {
+    const response = await axios.get('/projects');
+    return response.data;
   },
 
-  getProjects() {
-    return axios.get('/projects').then(response => response.data);
+  async createProject(project) {
+    const response = await axios.post('/projects', project);
+    return response.data;
   },
 
-  createProject(project) {
-    return axios.post('/projects', project).then(response => response.data);
-  },
-
-  deleteProject(projectID) {
-    return axios.delete(`/projects/${projectID}`);
+  async deleteProject(projectID) {
+    await axios.delete(`/projects/${projectID}`);
   },
 };
 
