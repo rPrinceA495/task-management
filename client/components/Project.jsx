@@ -1,5 +1,5 @@
 import React from 'react';
-import { Panel, Label, ListGroup, ListGroupItem, Button, Dropdown, MenuItem, SafeAnchor } from 'react-bootstrap';
+import { Panel, Button, Dropdown, MenuItem, SafeAnchor, Table } from 'react-bootstrap';
 import Icon from 'react-fa';
 import Task from './Task.jsx';
 
@@ -58,13 +58,13 @@ export default class Project extends React.Component {
         header={this.renderHeader()}
         bsStyle="info">
 
-        <ListGroup fill>
-          {this.props.project.tasks && this.props.project.tasks.map(task =>
-            <ListGroupItem key={task.id}>
-              <Task task={task} />
-            </ListGroupItem>
-          )}
-        </ListGroup>
+        <Table hover striped fill>
+          <tbody>
+            {this.props.project.tasks && this.props.project.tasks.map(task =>
+              <Task key={task.id} task={task} />
+            )}
+          </tbody>
+        </Table>
       </Panel>
     );
   }

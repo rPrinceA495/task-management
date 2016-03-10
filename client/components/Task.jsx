@@ -29,13 +29,12 @@ export default class Task extends React.Component {
 
   render() {
     return (
-      <div
+      <tr
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}>
-
-        {this.props.task.name}
-  
-      </div>
+        <td className="text-info"><Icon name="minus" fixedWidth /> {this.props.task.name}</td>
+        <td className="text-info"><Icon name="user" fixedWidth /> </td>
+      </tr>
     );
   }
 }
