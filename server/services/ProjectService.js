@@ -6,11 +6,11 @@ const ProjectService = {
   },
 
   async createProject(project) {
-    const projectTemplate = await db.Project.findById(project.projectTemplateId);
-    if (!projectTemplate) {
-      throw new Error(`Cannot find project template with id = ${project.projectTemplateId}.`);
+    const template = await db.Project.findById(project.templateId);
+    if (!template) {
+      throw new Error(`Cannot find project template with id = ${project.templateId}.`);
     }
-    const tasks = await projectTemplate.getTasks();
+    const tasks = await template.getTasks();
     return await db.Project.create({
       name: project.name,
       tasks: tasks.map(task => ({
@@ -22,11 +22,16 @@ const ProjectService = {
     });
   },
 
-  async deleteProject(projectID) {
-    const project = await db.Project.findById(projectID);
+  async deleteProject(projectId) {
+    const project = await db.Project.findById(projectId);
     if (project) {
       await project.destroy();
     }
+  },
+
+  async updateTask(projectId, taskId, updates) {
+    const task = await db.Task.findById(taskId);
+    await task.update(updates);
   },
 };
 

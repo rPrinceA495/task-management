@@ -10,7 +10,15 @@ export function* createProject() {
 }
 
 export function* deleteProject() {
-  const projectID = this.params.id;
-  yield ProjectService.deleteProject(projectID);
+  yield ProjectService.deleteProject(this.params.projectId);
+  this.status = 204;
+}
+
+export function* updateTask() {
+  yield ProjectService.updateTask(
+    this.params.projectId,
+    this.params.taskId,
+    this.request.body,
+  );
   this.status = 204;
 }

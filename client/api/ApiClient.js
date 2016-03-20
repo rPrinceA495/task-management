@@ -13,8 +13,12 @@ const ApiClient = {
     return response.data;
   },
 
-  async deleteProject(projectID) {
-    await axios.delete(`/projects/${projectID}`);
+  async deleteProject(projectId) {
+    await axios.delete(`/projects/${projectId}`);
+  },
+
+  async updateTask(projectId, taskId, updates) {
+    await axios.patch(`/projects/${projectId}/tasks/${taskId}`, updates);
   },
 };
 

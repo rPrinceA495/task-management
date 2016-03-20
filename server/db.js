@@ -45,6 +45,11 @@ const Task = sequelize.define('task', {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+  status: {
+    type: Sequelize.ENUM('active', 'completed', 'cancelled'),
+    allowNull: false,
+    defaultValue: 'active',
+  },
 });
 
 Project.hasMany(Task, {

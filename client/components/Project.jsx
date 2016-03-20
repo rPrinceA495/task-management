@@ -61,7 +61,10 @@ export default class Project extends React.Component {
         <Table hover striped fill>
           <tbody>
             {this.props.project.tasks && this.props.project.tasks.map(task =>
-              <Task key={task.id} task={task} />
+              <Task
+                key={task.id}
+                task={task}
+                projectActions={this.props.projectActions} />
             )}
           </tbody>
         </Table>

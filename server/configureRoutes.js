@@ -8,7 +8,8 @@ export default function configureRoutes(app) {
   router.get('/', index);
   router.get('/api/projects', projects.getProjects);
   router.post('/api/projects', projects.createProject);
-  router.delete('/api/projects/:id', projects.deleteProject);
+  router.delete('/api/projects/:projectId', projects.deleteProject);
+  router.patch('/api/projects/:projectId/tasks/:taskId', projects.updateTask);
 
   app.use(router.routes());
 }

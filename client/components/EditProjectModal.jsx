@@ -3,7 +3,7 @@ import { Modal, Button, Input } from 'react-bootstrap';
 
 export default class EditProjectModal extends React.Component {
   static propTypes = {
-    projectTemplates: React.PropTypes.array,
+    templates: React.PropTypes.array,
     show: React.PropTypes.bool,
     onSave: React.PropTypes.func.isRequired,
     onHide: React.PropTypes.func.isRequired
@@ -13,10 +13,10 @@ export default class EditProjectModal extends React.Component {
     super(props);
     this.state = {
       name: '',
-      projectTemplateId: props.projectTemplates[0].id
+      templateId: props.templates[0].id
     };
     this.handleNameChange = ::this.handleNameChange;
-    this.handleProjectTemplateChange = ::this.handleProjectTemplateChange;
+    this.handleTemplateChange = ::this.handleTemplateChange;
     this.handleSubmit = ::this.handleSubmit;
   }
 
@@ -26,9 +26,9 @@ export default class EditProjectModal extends React.Component {
     });
   }
 
-  handleProjectTemplateChange(event) {
+  handleTemplateChange(event) {
     this.setState({
-      projectTemplateId: parseInt(event.target.value, 10)
+      templateId: parseInt(event.target.value, 10)
     });
   }
 
@@ -36,18 +36,18 @@ export default class EditProjectModal extends React.Component {
     event.preventDefault();
     this.props.onSave({
       name: this.state.name,
-      projectTemplateId: this.state.projectTemplateId
+      templateId: this.state.templateId
     });
   }
 
-  renderProjectTemplates() {
+  renderTemplates() {
     return (
       <Input
         type="select"
-        value={this.state.projectTemplateId}
-        onChange={this.handleProjectTemplateChange}
+        value={this.state.templateId}
+        onChange={this.handleTemplateChange}
         label="Template">
-        {this.props.projectTemplates.map(item =>
+        {this.props.templates.map(item =>
           <option
             key={item.id}
             value={item.id}>
@@ -76,7 +76,7 @@ export default class EditProjectModal extends React.Component {
               onChange={this.handleNameChange}
               label="Name" />
 
-            {this.renderProjectTemplates()}
+            {this.renderTemplates()}
           </Modal.Body>
           <Modal.Footer>
             <Button

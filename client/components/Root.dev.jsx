@@ -13,7 +13,7 @@ export default class Root extends React.Component {
       <Provider store={this.props.store}>
         <div>
           <App />
-          <DevTools />
+          {/* <DevTools /> */}
         </div>
       </Provider>
     );

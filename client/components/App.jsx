@@ -65,7 +65,7 @@ class App extends React.Component {
             <Icon name="plus" /> Create Project
           </Button>
           <EditProjectModal
-            projectTemplates={this.props.projects.items.filter(project => project.isTemplate)}
+            templates={this.props.projects.items.filter(project => project.isTemplate)}
             show={this.state.showProjectModal}
             onSave={this.handleProjectSave}
             onHide={this.hideProjectModal} />
@@ -92,9 +92,11 @@ class App extends React.Component {
           <Navbar.Header>
             <Navbar.Brand>Task Management</Navbar.Brand>
           </Navbar.Header>
+          {/*
           <Nav pullRight>
             <NavItem><Icon name="cog" size="lg" /></NavItem>
           </Nav>
+          */}
         </Navbar>
         {isLoading && this.renderLoader()}
         {!isLoading && this.props.projects.items && this.renderProjects()}
