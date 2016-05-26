@@ -1,5 +1,5 @@
 import ApiClient from '../api/ApiClient';
-import { createAsyncTypes, createAsyncAction} from './ActionUtils';
+import { createAsyncTypes, createAsyncAction } from './ActionUtils';
 
 export const LOAD_PROJECTS = createAsyncTypes('LOAD_PROJECTS');
 

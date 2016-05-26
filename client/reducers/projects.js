@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import * as ProjectActions from '../actions/ProjectActions';
 
 function task(state, action) {
@@ -26,7 +25,7 @@ function project(state, action) {
       return {
         ...state,
         tasks: state.tasks.map(
-          item => item.id === action.taskId ? task(item, action) : item
+          item => (item.id === action.taskId ? task(item, action) : item)
         ),
       };
     default:
@@ -61,7 +60,7 @@ export default function projects(state = initialState, action) {
       return {
         ...state,
         items: state.items.map(item =>
-          item.id === action.projectId ? project(item, action) : item
+          (item.id === action.projectId ? project(item, action) : item)
         ),
       };
     default:

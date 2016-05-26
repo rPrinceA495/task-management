@@ -1,10 +1,8 @@
-// import path from 'path';
-var path = require('path');
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+import path from 'path';
+import webpack from 'webpack';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-// export default
-module.exports = {
+export default {
   entry: [
     'webpack-hot-middleware/client',
     path.join(__dirname, 'index.js'),

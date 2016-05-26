@@ -71,7 +71,7 @@
   "scripts": {
     "start": "set NODE_ENV=development&& nodemon server/index.js --watch server common --exec babel-node",
     "clean": "rimraf dist",
-    "build:client": "webpack -p --config client/webpack.config.js --progress",
+    "build:client": "webpack -p --config client/webpack.config.babel.js --progress",
     "build:server": "babel server -d dist/server",
     "build": "npm run clean && npm run build:client && npm run build:server",
     "test": "jest",

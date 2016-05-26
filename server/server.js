@@ -6,7 +6,7 @@ import configureRoutes from './configureRoutes';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'koa-webpack-dev-middleware';
 import webpackHotMiddleware from 'koa-webpack-hot-middleware';
-import webpackConfig from '../client/webpack.config';
+import webpackConfig from '../client/webpack.config.babel';
 import path from 'path';
 
 async function run() {

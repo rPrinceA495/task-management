@@ -46,7 +46,7 @@ const Task = sequelize.define('task', {
     allowNull: false,
   },
   status: {
-    type: Sequelize.ENUM('active', 'completed', 'cancelled'),
+    type: Sequelize.ENUM('active', 'completed', 'cancelled'), // eslint-disable-line new-cap
     allowNull: false,
     defaultValue: 'active',
   },

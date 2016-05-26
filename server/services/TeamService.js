@@ -5,6 +5,7 @@ const TeamService = {
     return await db.Team.findAll();
   },
 
+  /*
   async createTeam(team) {
 
   },
@@ -12,6 +13,7 @@ const TeamService = {
   async deleteTeam(teamID) {
 
   },
+  */
 };
 
 export default TeamService;

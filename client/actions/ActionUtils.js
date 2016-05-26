@@ -13,7 +13,7 @@ export function createAsyncTypes(prefix) {
 export function createAsyncAction(fn, types, payload, condition) {
   return async (dispatch, getState) => {
     if (condition && !condition(getState())) {
-      return null;
+      return;
     }
     dispatch({ type: types.REQUEST, ...payload });
     try {

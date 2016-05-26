@@ -25,9 +25,9 @@ async function recreateDB() {
       }, {
         name: 'Submit a PR',
         position: 6,
-      }]
+      }],
     }, {
-      include: [db.Task]
+      include: [db.Task],
     });
   } catch (err) {
     console.log(err);
