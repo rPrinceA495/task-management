@@ -4,7 +4,7 @@ import { Navbar, Grid, Row, Col, Button, Nav, NavItem } from 'react-bootstrap';
 import Icon from 'react-fa';
 import Project from './Project.jsx';
 import EditProjectModal from './EditProjectModal.jsx';
-import Loader from 'react-loader';
+import Loader from './Loader.jsx';
 
 @observer
 export default class App extends Component {
@@ -41,17 +41,6 @@ export default class App extends Component {
     this.setState({
       showProjectModal: false
     });
-  }
-
-  renderLoader() {
-    return (
-      <Loader
-        lines={13}
-        length={28}
-        width={14}
-        radius={42}
-        color="#999999" />
-    );
   }
 
   renderProjects() {
@@ -96,7 +85,7 @@ export default class App extends Component {
           </Nav>
           */}
         </Navbar>
-        {isLoading && this.renderLoader()}
+        {isLoading && <Loader />}
         {!isLoading && this.props.projectStore.projects && this.renderProjects()}
       </div>
     );
