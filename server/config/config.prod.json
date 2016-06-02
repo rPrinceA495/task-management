@@ -1,3 +1,12 @@
 {
-
+  "db": {
+    "name": "task-mgmt",
+    "username": "root",
+    "password": "foobar",
+    "options": {
+      "host": "localhost",
+      "port": 3306,
+      "dialect": "mysql"
+    }
+  }
 }

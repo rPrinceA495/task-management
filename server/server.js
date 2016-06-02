@@ -6,42 +6,39 @@ import configureRoutes from './configureRoutes';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'koa-webpack-dev-middleware';
 // import webpackHotMiddleware from 'koa-webpack-hot-middleware';
-import webpackConfig from '../client/webpack.config.babel';
 import path from 'path';
 
-async function run() {
-  const app = koa();
+const app = koa();
 
-  app.use(function* (next) {
-    try {
-      yield next;
-    } catch (err) {
-      this.status = err.status || 500;
-      this.app.emit('error', err, this);
-    }
-  });
-
-  app.use(hbs.middleware({
-    viewPath: path.join(__dirname, 'views'),
-  }));
-
-  app.use(bodyParser());
-
-  configureRoutes(app);
-
-  if (process.env.NODE_ENV === 'production') {
-    console.log('Setting static file serving middleware...');
-    app.use(serveStatic(path.join(__dirname, '../static')));
-  } else {
-    console.log('Setting up webpack middleware...');
-    const compiler = webpack(webpackConfig);
-    app.use(webpackDevMiddleware(compiler, { noInfo: true }));
-    // app.use(webpackHotMiddleware(compiler, { noInfo: true }));
+app.use(function* (next) {
+  try {
+    yield next;
+  } catch (err) {
+    this.status = err.status || 500;
+    this.app.emit('error', err, this);
   }
+});
 
-  const port = process.env.PORT || 5555;
-  console.log(`Listening on port ${port}...`);
-  app.listen(port);
+app.use(hbs.middleware({
+  viewPath: path.join(__dirname, 'views'),
+}));
+
+app.use(bodyParser());
+
+configureRoutes(app);
+
+console.log('NODE_ENV =', process.env.NODE_ENV);
+if (process.env.NODE_ENV === 'production') {
+  console.log('Setting up static file serving middleware...');
+  app.use(serveStatic(path.join(__dirname, '../client')));
+} else {
+  console.log('Setting up webpack middleware...');
+  const webpackConfig = require('../client/webpack.config.babel').default;
+  const compiler = webpack(webpackConfig);
+  app.use(webpackDevMiddleware(compiler, { noInfo: true }));
+  // app.use(webpackHotMiddleware(compiler, { noInfo: true }));
 }
 
-run();
+const port = process.env.PORT || 5555;
+console.log(`Listening on port ${port}...`);
+app.listen(port);

@@ -60,19 +60,20 @@
     "css-loader": "^0.23.1",
     "url-loader": "^0.5.7",
     "file-loader": "^0.8.5",
-    "extract-text-webpack-plugin": "^1.0.1"
+    "extract-text-webpack-plugin": "^1.0.1",
+    "cross-env": "^1.0.8",
+    "copyfiles": "^0.2.1"
   },
   "scripts": {
-    "start": "set NODE_ENV=development&& nodemon server/index.js --watch server common --exec babel-node",
+    "start": "cross-env NODE_ENV=development nodemon server/index.js --watch server common --exec babel-node",
+    "start:prod": "cross-env NODE_ENV=production node dist/server",
     "clean": "rimraf dist",
-    "build:client": "webpack -p --config client/webpack.config.babel.js --progress",
-    "build:server": "babel server -d dist/server",
+    "copy:server": "copyfiles server/**/*.json server/**/*.hbs dist",
+    "build:client": "cross-env NODE_ENV=production webpack -p --config client/webpack.config.babel.js --progress",
+    "build:server": "cross-env NODE_ENV=production babel server -d dist/server && npm run copy:server",
     "build": "npm run clean && npm run build:client && npm run build:server",
     "test": "jest",
-    "lint": "eslint client server common",
-    "recreatedb": "set NODE_ENV=development&& babel-node server/recreateDB.js"
-  },
-  "jest": {
-    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest"
+    "lint": "eslint client server common --ext .js,.jsx",
+    "recreatedb": "cross-env NODE_ENV=development babel-node server/recreateDB.js"
   }
 }
