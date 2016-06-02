@@ -29,7 +29,7 @@ const ProjectService = {
     }
   },
 
-  async updateTask(projectId, taskId, updates) {
+  async updateTask(taskId, updates) {
     const task = await db.Task.findById(taskId);
     await task.update(updates);
   },

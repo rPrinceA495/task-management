@@ -1,11 +1,12 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import Icon from 'react-fa';
 import { SplitButton, MenuItem, ButtonGroup, Button } from 'react-bootstrap';
 
+@observer
 export default class Task extends React.Component {
   static propTypes = {
     task: React.PropTypes.object.isRequired,
-    projectActions: React.PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -32,19 +33,11 @@ export default class Task extends React.Component {
   }
 
   handleStatusButtonClick() {
-    this.updateTaskStatus('completed');
+    this.props.task.updateStatus('completed');
   }
 
-  handleStatusMenuItemSelect(event, eventKey) {
-    this.updateTaskStatus(eventKey);
-  }
-
-  updateTaskStatus(value) {
-    this.props.projectActions.updateTaskStatus(
-      this.props.task.projectId,
-      this.props.task.id,
-      value,
-    );
+  handleStatusMenuItemSelect(eventKey, event) {
+    this.props.task.updateStatus(eventKey);
   }
 
   getTextClassName() {
@@ -104,7 +97,7 @@ export default class Task extends React.Component {
               <Button>Cancelled</Button>
             </ButtonGroup>
             */}
-            
+
             <SplitButton
               title="Completed"
               onClick={this.handleStatusButtonClick}

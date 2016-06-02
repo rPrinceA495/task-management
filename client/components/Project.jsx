@@ -1,12 +1,13 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import { Panel, Button, Dropdown, MenuItem, SafeAnchor, Table } from 'react-bootstrap';
 import Icon from 'react-fa';
 import Task from './Task.jsx';
 
+@observer
 export default class Project extends React.Component {
   static propTypes = {
     project: React.PropTypes.object.isRequired,
-    projectActions: React.PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -16,7 +17,7 @@ export default class Project extends React.Component {
 
   handleDeleteClick(event) {
     event.preventDefault();
-    this.props.projectActions.deleteProject(this.props.project.id);
+    this.props.project.delete();
   }
 
   renderDropdown() {
@@ -40,16 +41,16 @@ export default class Project extends React.Component {
   }
 
   renderHeader() {
-      return (
-        <div>
-          {this.props.project.name}
+    return (
+      <div>
+        {this.props.project.name}
 
-          <div className="pull-right">
-            {this.renderDropdown()}
-          </div>
-
+        <div className="pull-right">
+          {this.renderDropdown()}
         </div>
-      );
+
+      </div>
+    );
   }
 
   render() {
@@ -63,8 +64,7 @@ export default class Project extends React.Component {
             {this.props.project.tasks && this.props.project.tasks.map(task =>
               <Task
                 key={task.id}
-                task={task}
-                projectActions={this.props.projectActions} />
+                task={task} />
             )}
           </tbody>
         </Table>

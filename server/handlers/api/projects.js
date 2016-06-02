@@ -16,7 +16,6 @@ export function* deleteProject() {
 
 export function* updateTask() {
   yield ProjectService.updateTask(
-    this.params.projectId,
     this.params.taskId,
     this.request.body,
   );

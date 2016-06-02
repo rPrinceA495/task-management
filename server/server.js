@@ -5,7 +5,7 @@ import serveStatic from 'koa-static';
 import configureRoutes from './configureRoutes';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'koa-webpack-dev-middleware';
-import webpackHotMiddleware from 'koa-webpack-hot-middleware';
+// import webpackHotMiddleware from 'koa-webpack-hot-middleware';
 import webpackConfig from '../client/webpack.config.babel';
 import path from 'path';
 
@@ -36,7 +36,7 @@ async function run() {
     console.log('Setting up webpack middleware...');
     const compiler = webpack(webpackConfig);
     app.use(webpackDevMiddleware(compiler, { noInfo: true }));
-    app.use(webpackHotMiddleware(compiler, { noInfo: true }));
+    // app.use(webpackHotMiddleware(compiler, { noInfo: true }));
   }
 
   const port = process.env.PORT || 5555;

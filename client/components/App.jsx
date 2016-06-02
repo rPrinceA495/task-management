@@ -1,14 +1,17 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, { Component, PropTypes } from 'react';
+import { observer } from 'mobx-react';
 import { Navbar, Grid, Row, Col, Button, Nav, NavItem } from 'react-bootstrap';
 import Icon from 'react-fa';
 import Project from './Project.jsx';
 import EditProjectModal from './EditProjectModal.jsx';
 import Loader from 'react-loader';
-import * as ProjectActions from '../actions/ProjectActions';
 
-class App extends React.Component {
+@observer
+export default class App extends Component {
+  static propTypes = {
+    projectStore: PropTypes.object.isRequired,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +23,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.props.projectActions.loadProjects();
+    this.props.projectStore.loadProjects();
   }
 
   handleCreateProjectButtonClick() {
@@ -29,19 +32,15 @@ class App extends React.Component {
     });
   }
 
-  handleProjectSave(project) {
+  handleProjectSave(name, templateId) {
     this.hideProjectModal();
-    this.props.projectActions.createProject(project);
+    this.props.projectStore.createProject(name, templateId);
   }
 
   hideProjectModal() {
     this.setState({
       showProjectModal: false
     });
-  }
-
-  isLoading() {
-    return this.props.projects.isLoading;
   }
 
   renderLoader() {
@@ -65,18 +64,17 @@ class App extends React.Component {
             <Icon name="plus" /> Create Project
           </Button>
           <EditProjectModal
-            templates={this.props.projects.items.filter(project => project.isTemplate)}
+            templates={this.props.projectStore.projects.filter(project => project.isTemplate)}
             show={this.state.showProjectModal}
             onSave={this.handleProjectSave}
             onHide={this.hideProjectModal} />
 
-          {this.props.projects.items
+          {this.props.projectStore.projects
             .filter(project => !project.isTemplate)
             .map(project =>
               <Project
                 key={project.id}
-                project={project}
-                projectActions={this.props.projectActions} />
+                project={project} />
             )
           }
 
@@ -85,7 +83,7 @@ class App extends React.Component {
   }
 
   render() {
-    const isLoading = this.isLoading();
+    const isLoading = this.props.projectStore.isLoading;
     return (
       <div>
         <Navbar inverse fixedTop>
@@ -99,22 +97,8 @@ class App extends React.Component {
           */}
         </Navbar>
         {isLoading && this.renderLoader()}
-        {!isLoading && this.props.projects.items && this.renderProjects()}
+        {!isLoading && this.props.projectStore.projects && this.renderProjects()}
       </div>
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    projects: state.projects,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    projectActions: bindActionCreators(ProjectActions, dispatch),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);

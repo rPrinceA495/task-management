@@ -3,10 +3,7 @@ import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 export default {
-  entry: [
-    'webpack-hot-middleware/client',
-    path.join(__dirname, 'index.js'),
-  ],
+  entry: path.join(__dirname, 'index.jsx'),
   output: {
     path: path.join(__dirname, '../dist/client'),
     filename: 'bundle.js',
@@ -33,9 +30,6 @@ export default {
     ],
   },
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
     new ExtractTextPlugin('bundle.css'),
   ],
 };

@@ -1,6 +1,8 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import { Modal, Button, Input } from 'react-bootstrap';
 
+@observer
 export default class EditProjectModal extends React.Component {
   static propTypes = {
     templates: React.PropTypes.array,
@@ -34,10 +36,7 @@ export default class EditProjectModal extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.onSave({
-      name: this.state.name,
-      templateId: this.state.templateId
-    });
+    this.props.onSave(this.state.name, this.state.templateId);
   }
 
   renderTemplates() {

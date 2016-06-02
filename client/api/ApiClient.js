@@ -17,8 +17,8 @@ const ApiClient = {
     await axios.delete(`/projects/${projectId}`);
   },
 
-  async updateTask(projectId, taskId, updates) {
-    await axios.patch(`/projects/${projectId}/tasks/${taskId}`, updates);
+  async updateTask(taskId, updates) {
+    await axios.patch(`/tasks/${taskId}`, updates);
   },
 };
 
