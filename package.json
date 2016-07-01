@@ -72,7 +72,8 @@
     "build:client": "cross-env NODE_ENV=production webpack -p --config client/webpack.config.babel.js --progress",
     "build:server": "cross-env NODE_ENV=production babel server -d dist/server && npm run copy:server",
     "build": "npm run clean && npm run build:client && npm run build:server",
-    "test": "jest",
+    "test:api": "jest --config test/api/jest.json",
+    "test": "npm run test:api",
     "lint": "eslint client server common --ext .js,.jsx",
     "recreatedb": "cross-env NODE_ENV=development babel-node server/recreateDB.js"
   }
