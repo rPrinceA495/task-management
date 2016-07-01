@@ -5,6 +5,10 @@ const ProjectService = {
     return await db.Project.findAll({ include: [db.Task] });
   },
 
+  async getProject(projectId) {
+    return await db.Project.findById(projectId, { include: [db.Task] });
+  },
+
   async createProject(project) {
     const template = await db.Project.findById(project.templateId);
     if (!template) {

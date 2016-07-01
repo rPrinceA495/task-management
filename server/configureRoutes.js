@@ -7,6 +7,7 @@ export default function configureRoutes(app) {
 
   router.get('/', index);
   router.get('/api/projects', projects.getProjects);
+  router.get('/api/projects/:projectId', projects.getProject);
   router.post('/api/projects', projects.createProject);
   router.delete('/api/projects/:projectId', projects.deleteProject);
   router.patch('/api/tasks/:taskId', projects.updateTask);
