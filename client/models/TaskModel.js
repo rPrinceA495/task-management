@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import ApiClient from '../api/ApiClient';
+import ApiClient from '../../common/api/ApiClient';
 
 export default class TaskModel {
   id;

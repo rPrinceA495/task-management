@@ -61,6 +61,8 @@ const db = {
   sequelize,
   Project,
   Task,
+
+  execute: ::sequelize.transaction,
 };
 
 export default db;

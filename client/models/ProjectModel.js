@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import TaskModel from './TaskModel';
-import ApiClient from '../api/ApiClient';
+import ApiClient from '../../common/api/ApiClient';
 
 export default class ProjectModel {
   store;
