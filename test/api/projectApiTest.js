@@ -84,9 +84,9 @@ describe('Project API', () => {
   describe('PATCH /api/projects/<id>', () => {
     it('updates the specified project', async () => {
       const project = await client.createProject({ name: 'Test Project' });
-      await client.updateProject(project.id, { name: 'TestProject 2' });
+      await client.updateProject(project.id, { name: 'Test Project 2' });
       const updatedProject = await client.getProject(project.id);
-      expect(updatedProject.name).toBe('TestProject 2');
+      expect(updatedProject.name).toBe('Test Project 2');
     });
 
     it('throws a NotFound error when the specified project does not exist', () =>
@@ -103,6 +103,55 @@ describe('Project API', () => {
 
     it('throws a NotFound error when the specified project does not exist', () =>
       expectToThrow(() => client.deleteProject(333333333), NotFoundError)
+    );
+  });
+
+  describe('POST /api/projects/<projectId>/tasks', () => {
+    it('creates a new task', async () => {
+      const project = await client.createProject({ name: 'Test Project' });
+      const result = await client.createTask(project.id, { name: 'Test Task' });
+      expect(result).toBeDefined();
+      expect(result.id).toBeDefined();
+      expect(result.name).toBe('Test Task');
+
+      const task = await client.getTask(project.id, result.id);
+      expect(task.id).toBe(result.id);
+      expect(task.name).toBe('Test Task');
+    });
+
+    it('throws a NotFound error when the specified project does not exist', () =>
+      expectToThrow(() => client.createTask(333333333, { name: 'Test' }), NotFoundError)
+    );
+  });
+
+  describe('PATCH /api/projects/<projectId>/tasks/<taskId>', () => {
+    it('updates the specified task', async () => {
+      const project = await client.createProject({ name: 'Test Project' });
+      const task = await client.createTask(project.id, { name: 'Test Task' });
+      await client.updateTask(project.id, task.id, {
+        name: 'Test Task 2',
+        status: 'completed',
+      });
+      const updatedTask = await client.getTask(project.id, task.id);
+      expect(updatedTask.name).toBe('Test Task 2');
+      expect(updatedTask.status).toBe('completed');
+    });
+
+    it('throws a NotFound error when the specified task does not exist', () =>
+      expectToThrow(() => client.updateTask(333333333, 333333333, { name: 'Test' }), NotFoundError)
+    );
+  });
+
+  describe('DELETE /api/projects/<projectId>/tasks/<taskId>', () => {
+    it('deletes the specified task', async () => {
+      const project = await client.createProject({ name: 'Test Project' });
+      const task = await client.createTask(project.id, { name: 'Test Task' });
+      await client.deleteTask(project.id, task.id);
+      await expectToThrow(() => client.getTask(project.id, task.id), NotFoundError);
+    });
+
+    it('throws a NotFound error when the specified task does not exist', () =>
+      expectToThrow(() => client.deleteTask(333333333, 333333333), NotFoundError)
     );
   });
 });

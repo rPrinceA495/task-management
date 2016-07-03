@@ -18,5 +18,6 @@ export default function* errors(next) {
       setError(this, 500, 'InternalError', 'An internal error has occurred.');
     }
     // TODO: log the error
+    console.log(error);
   }
 }

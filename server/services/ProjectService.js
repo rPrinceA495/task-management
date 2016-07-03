@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 const ProjectService = {
   async createProject(project) {
-    return db.execute(async (transaction) => {
+    return await db.execute(async (transaction) => {
       let tasks = null;
 
       if (project.templateId) {
@@ -54,14 +54,14 @@ const ProjectService = {
   },
 
   async createTask(projectId, task) {
-    await db.execute(async (transaction) => {
+    return await db.execute(async (transaction) => {
       const project = await this.getProject(projectId, {
         includeTasks: true,
         transaction,
       });
       // TODO: task.position
       const lastTask = _.maxBy(project.tasks, task => task.position);
-      return db.Task.create({
+      return await db.Task.create({
         projectId,
         name: task.name,
         position: lastTask ? lastTask.position + 1 : 1,
@@ -71,9 +71,12 @@ const ProjectService = {
     });
   },
 
-  async getTask(projectId, taskId, { transaction }) {
+  async getTask(projectId, taskId, { transaction } = {}) {
     const task = await db.Task.findOne({
-      where: { projectId, taskId },
+      where: {
+        projectId,
+        id: taskId,
+      },
       transaction,
     });
     if (!task) {
@@ -85,7 +88,7 @@ const ProjectService = {
   },
 
   async getTasks(projectId) {
-    const project = this.getProject(projectId, { includeTasks: true });
+    const project = await this.getProject(projectId, { includeTasks: true });
     return project.tasks;
   },
 
@@ -104,7 +107,7 @@ const ProjectService = {
     });
   },
 
-  getProjectSearchOptions({ includeTasks, transaction }) {
+  getProjectSearchOptions({ includeTasks, transaction } = {}) {
     const options = {
       include: [],
       transaction,
