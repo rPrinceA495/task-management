@@ -1,53 +1,53 @@
 import ProjectService from '../../services/ProjectService';
 
-export function* createProject() {
-  this.body = yield ProjectService.createProject(this.request.body);
+export async function createProject(ctx) {
+  ctx.body = await ProjectService.createProject(ctx.request.body);
 }
 
-export function* getProject() {
-  this.body = yield ProjectService.getProject(this.params.projectId, {
-    includeTasks: this.query.includeTasks,
+export async function getProject(ctx) {
+  ctx.body = await ProjectService.getProject(ctx.params.projectId, {
+    includeTasks: ctx.query.includeTasks,
   });
 }
 
-export function* getProjects() {
-  this.body = yield ProjectService.getProjects({
-    includeTasks: this.query.includeTasks,
+export async function getProjects(ctx) {
+  ctx.body = await ProjectService.getProjects({
+    includeTasks: ctx.query.includeTasks,
   });
 }
 
-export function* updateProject() {
-  yield ProjectService.updateProject(this.params.projectId, this.request.body);
-  this.status = 204;
+export async function updateProject(ctx) {
+  await ProjectService.updateProject(ctx.params.projectId, ctx.request.body);
+  ctx.status = 204;
 }
 
-export function* deleteProject() {
-  yield ProjectService.deleteProject(this.params.projectId);
-  this.status = 204;
+export async function deleteProject(ctx) {
+  await ProjectService.deleteProject(ctx.params.projectId);
+  ctx.status = 204;
 }
 
-export function* createTask() {
-  this.body = yield ProjectService.createTask(this.params.projectId, this.request.body);
+export async function createTask(ctx) {
+  ctx.body = await ProjectService.createTask(ctx.params.projectId, ctx.request.body);
 }
 
-export function* getTask() {
-  this.body = yield ProjectService.getTask(this.params.projectId, this.params.taskId);
+export async function getTask(ctx) {
+  ctx.body = await ProjectService.getTask(ctx.params.projectId, ctx.params.taskId);
 }
 
-export function* getTasks() {
-  this.body = yield ProjectService.getTasks(this.params.projectId);
+export async function getTasks(ctx) {
+  ctx.body = await ProjectService.getTasks(ctx.params.projectId);
 }
 
-export function* updateTask() {
-  yield ProjectService.updateTask(
-    this.params.projectId,
-    this.params.taskId,
-    this.request.body
+export async function updateTask(ctx) {
+  await ProjectService.updateTask(
+    ctx.params.projectId,
+    ctx.params.taskId,
+    ctx.request.body
   );
-  this.status = 204;
+  ctx.status = 204;
 }
 
-export function* deleteTask() {
-  yield ProjectService.deleteTask(this.params.projectId, this.params.taskId);
-  this.status = 204;
+export async function deleteTask(ctx) {
+  await ProjectService.deleteTask(ctx.params.projectId, ctx.params.taskId);
+  ctx.status = 204;
 }

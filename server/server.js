@@ -1,4 +1,4 @@
-import koa from 'koa';
+import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import hbs from 'koa-hbs';
 import serveStatic from 'koa-static';
@@ -6,22 +6,23 @@ import configureRoutes from './configureRoutes';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'koa-webpack-dev-middleware';
 // import webpackHotMiddleware from 'koa-webpack-hot-middleware';
+import convert from 'koa-convert';
 import path from 'path';
 
-const app = koa();
+const app = new Koa();
 
-app.use(function* (next) {
+app.use(async (ctx, next) => {
   try {
-    yield next;
+    await next();
   } catch (err) {
-    this.status = err.status || 500;
-    this.app.emit('error', err, this);
+    ctx.status = err.status || 500;
+    ctx.app.emit('error', err, ctx);
   }
 });
 
-app.use(hbs.middleware({
+app.use(convert(hbs.middleware({
   viewPath: path.join(__dirname, 'views'),
-}));
+})));
 
 app.use(bodyParser());
 
@@ -35,7 +36,7 @@ if (process.env.NODE_ENV === 'production') {
   console.log('Setting up webpack middleware...');
   const webpackConfig = require('../client/webpack.config.babel').default;
   const compiler = webpack(webpackConfig);
-  app.use(webpackDevMiddleware(compiler, { noInfo: true }));
+  app.use(convert(webpackDevMiddleware(compiler, { noInfo: true })));
   // app.use(webpackHotMiddleware(compiler, { noInfo: true }));
 }
 
