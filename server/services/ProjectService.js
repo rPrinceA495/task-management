@@ -5,7 +5,7 @@ import _ from 'lodash';
 const ProjectService = {
   async createProject(project) {
     return await db.execute(async (transaction) => {
-      let tasks = null;
+      let tasks = [];
 
       if (project.templateId) {
         const template = await this.getProject(project.templateId, {
@@ -23,6 +23,7 @@ const ProjectService = {
         tasks,
       }, {
         transaction,
+        include: [db.Task],
       });
     });
   },
