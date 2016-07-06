@@ -23,7 +23,7 @@ export default class ProjectModel {
   @action async delete() {
     this.isDeleting = true;
     try {
-      await ApiClient.deleteProject(this.id);
+      await this.store.apiClient.deleteProject(this.id);
       this.store.removeProject(this);
     } catch (error) {
       // TODO: handle error
@@ -44,13 +44,15 @@ export default class ProjectModel {
   }
 
   static fromJS(store, source) {
-    return new ProjectModel(
+    const project = new ProjectModel(
       store,
       source.id,
       source.name,
       source.description,
       source.isTemplate,
-      source.tasks.map(task => TaskModel.fromJS(task))
+      [],
     );
+    project.tasks = source.tasks.map(task => TaskModel.fromJS(store, project, task));
+    return project;
   }
 }

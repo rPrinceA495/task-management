@@ -1,10 +1,14 @@
 import { observable, action } from 'mobx';
-import ApiClient from '../../common/api/ApiClient';
 import ProjectModel from '../models/ProjectModel';
 
 export default class ProjectStore {
+  apiClient;
   @observable projects = null;
   @observable isLoading = false;
+
+  constructor(apiClient) {
+    this.apiClient = apiClient;
+  }
 
   @action async loadProjects() {
     if (this.projects) {
@@ -12,7 +16,7 @@ export default class ProjectStore {
     }
     this.isLoading = true;
     try {
-      const result = await ApiClient.getProjects();
+      const result = await this.apiClient.getProjects({ includeTasks: true });
       this.projects = result.map(project => ProjectModel.fromJS(this, project));
     } catch (error) {
       // TODO: handle error
@@ -24,7 +28,7 @@ export default class ProjectStore {
 
   @action async createProject(name, templateId) {
     try {
-      const result = await ApiClient.createProject({ name, templateId });
+      const result = await this.apiClient.createProject({ name, templateId });
       this.projects.push(ProjectModel.fromJS(this, result));
     } catch (error) {
       // TODO: handle error
