@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import sequentialMap from './sequentialMap';
 
 export default class ProjectHelper {
   constructor(client) {
@@ -8,7 +7,7 @@ export default class ProjectHelper {
 
   async createProjects(count) {
     const projects = _.times(count, i => ({ name: `Test Project ${i + 1}` }));
-    return await sequentialMap(projects, project => this.client.createProject(project));
+    return await Promise.all(projects.map(project => this.client.createProject(project)));
   }
 
   async createProject() {
@@ -21,7 +20,7 @@ export default class ProjectHelper {
       name: `Test Project Template ${i + 1}`,
       isTemplate: true,
     }));
-    return await sequentialMap(templates, template => this.client.createProject(template));
+    return await Promise.all(templates.map(template => this.client.createProject(template)));
   }
 
   async createProjectTemplate() {

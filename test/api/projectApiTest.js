@@ -16,27 +16,38 @@ describe('Project API', () => {
       const result = await client.createProject({ name: 'Test Project' });
       expect(result).toBeDefined();
       expect(result.id).toBeDefined();
-      expect(result.name).toBe('Test Project');
 
       const project = await client.getProject(result.id, { includeTasks: true });
       expect(project.id).toBe(result.id);
       expect(project.name).toBe('Test Project');
+      expect(project.status).toBe('active');
       expect(project.tasks).toEqual([]);
     });
 
     it('creates a new project from the specified template', async () => {
+      const template = await client.createProject({
+        name: 'Test Template',
+        isTemplate: true,
+      });
+      await client.createTask(template.id, { name: 'Test Task 1' });
+      await client.createTask(template.id, { name: 'Test Task 2' });
+
       const result = await client.createProject({
         name: 'Test Project',
-        templateId: 1,
+        templateId: template.id,
       });
       expect(result).toBeDefined();
       expect(result.id).toBeDefined();
-      expect(result.name).toBe('Test Project');
 
       const project = await client.getProject(result.id, { includeTasks: true });
       expect(project.id).toBe(result.id);
       expect(project.name).toBe('Test Project');
-      // expect(project.tasks).toEqual([ ... ]);
+      expect(project.status).toBe('active');
+      expect(project.tasks.length).toBe(2);
+      expect(project.tasks.map(task => task.name)).toContainAllOf([
+        'Test Task 1',
+        'Test Task 2',
+      ]);
     });
 
     it('throws a NotFound error when the specified template does not exist', () =>
