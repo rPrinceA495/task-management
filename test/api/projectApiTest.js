@@ -1,23 +1,16 @@
 import ApiClient from '../../common/api/ApiClient';
 import NotFoundError from '../../common/errors/NotFoundError';
+import expectToThrowAsync from './utils/expectToThrowAsync';
+import ProjectHelper from './utils/ProjectHelper';
+import matchers from './matchers';
 
+const getIds = items => items.map(item => item.id);
 const client = new ApiClient('http://localhost:5555/');
-
-// TODO: move this function to a separate file
-async function expectToThrow(fn, ErrorType, message) {
-  try {
-    await fn();
-    fail('Expected function to throw an Error.');
-  } catch (error) {
-    if (!(error instanceof ErrorType)) {
-      fail(`Expected function to throw ${ErrorType}, but it threw ${error}.`);
-    } else if (message) {
-      expect(error.message).toBe(message);
-    }
-  }
-}
+const projectHelper = new ProjectHelper(client);
 
 describe('Project API', () => {
+  beforeEach(() => jasmine.addMatchers(matchers));
+
   describe('POST /api/projects', () => {
     it('creates an empty project when no template is specified', async () => {
       const result = await client.createProject({ name: 'Test Project' });
@@ -47,7 +40,7 @@ describe('Project API', () => {
     });
 
     it('throws a NotFound error when the specified template does not exist', () =>
-      expectToThrow(
+      expectToThrowAsync(
         () => client.createProject({
           name: 'Test Project',
           templateId: 333333333,
@@ -59,26 +52,12 @@ describe('Project API', () => {
 
   describe('GET /api/projects/<id>', () => {
     it('throws a NotFound error when the specified project does not exist', () =>
-      expectToThrow(
+      expectToThrowAsync(
         () => client.getProject(333333333),
         NotFoundError,
         'Cannot find project with id = 333333333.'
       )
     );
-  });
-
-  describe('GET /api/projects', () => {
-    it('returns all projects', async () => {
-      const newProjects = [];
-      for (let i = 1; i <= 3; i++) {
-        newProjects.push(await client.createProject({ name: `Test Project ${i}` }));
-      }
-      const allProjects = await client.getProjects();
-      expect(newProjects.every(project => allProjects.some(p =>
-        p.id === project.id &&
-        p.name === project.name
-      ))).toBe(true);
-    });
   });
 
   describe('PATCH /api/projects/<id>', () => {
@@ -90,7 +69,7 @@ describe('Project API', () => {
     });
 
     it('throws a NotFound error when the specified project does not exist', () =>
-      expectToThrow(() => client.updateProject(333333333, { name: 'Test' }), NotFoundError)
+      expectToThrowAsync(() => client.updateProject(333333333, { name: 'Test' }), NotFoundError)
     );
   });
 
@@ -98,12 +77,78 @@ describe('Project API', () => {
     it('deletes the specified project', async () => {
       const project = await client.createProject({ name: 'Test Project' });
       await client.deleteProject(project.id);
-      await expectToThrow(() => client.getProject(project.id), NotFoundError);
+      await expectToThrowAsync(() => client.getProject(project.id), NotFoundError);
     });
 
     it('throws a NotFound error when the specified project does not exist', () =>
-      expectToThrow(() => client.deleteProject(333333333), NotFoundError)
+      expectToThrowAsync(() => client.deleteProject(333333333), NotFoundError)
     );
+  });
+
+  describe('GET /api/projects', () => {
+    it('returns all projects', async () => {
+      const newProjectIds = getIds(await projectHelper.createProjects(3));
+      const allProjectIds = getIds(await client.getProjects());
+      expect(allProjectIds).toContainAllOf(newProjectIds);
+    });
+  });
+
+  describe('GET /api/projects/active', () => {
+    it('returns all active projects', async () => {
+      const newProjectIds = getIds(await projectHelper.createProjects(3));
+      const activeProjectIds = getIds(await client.getProjectsByStatus('active'));
+      expect(activeProjectIds).toContainAllOf(newProjectIds);
+    });
+
+    it('does not return projects with status other than active', async () => {
+      const newProjectIds = getIds(await projectHelper.createProjects(3));
+      const statuses = ['completed', 'canceled', 'paused'];
+      for (let i = 0; i < 3; i++) {
+        await client.updateProject(newProjectIds[i], { status: statuses[i] });
+      }
+      const activeProjectIds = getIds(await client.getProjectsByStatus('active'));
+      expect(activeProjectIds).not.toContainAnyOf(newProjectIds);
+    });
+
+    it('does not return project templates', async () => {
+      const template = await projectHelper.createProjectTemplate();
+      const activeProjectIds = getIds(await client.getProjectsByStatus('active'));
+      expect(activeProjectIds).not.toContain(template.id);
+    });
+  });
+
+  describe('GET /api/projects/completed', () => {
+    it('returns all completed projects', async () => {
+      const newProjectIds = getIds(await projectHelper.createProjects(3));
+      for (const id of newProjectIds) {
+        await client.updateProject(id, { status: 'completed' });
+      }
+      const completedProjectIds = getIds(await client.getProjectsByStatus('completed'));
+      expect(completedProjectIds).toContainAllOf(newProjectIds);
+    });
+
+    it('does not return projects with status other than completed', async () => {
+      const newProjectIds = getIds(await projectHelper.createProjects(3));
+      // newProjectIds[0] -> 'active'
+      await client.updateProject(newProjectIds[1], { status: 'canceled' });
+      await client.updateProject(newProjectIds[2], { status: 'paused' });
+      const completedProjectIds = getIds(await client.getProjectsByStatus('completed'));
+      expect(completedProjectIds).not.toContainAnyOf(newProjectIds);
+    });
+
+    it('does not return project templates', async () => {
+      const template = await projectHelper.createProjectTemplate();
+      const completedProjectIds = getIds(await client.getProjectsByStatus('completed'));
+      expect(completedProjectIds).not.toContain(template.id);
+    });
+  });
+
+  describe('GET /api/projects/templates', () => {
+    it('returns all project templates', async () => {
+      const newTemplateIds = getIds(await projectHelper.createProjectTemplates(3));
+      const allTemplateIds = getIds(await client.getProjectTemplates());
+      expect(allTemplateIds).toContainAllOf(newTemplateIds);
+    });
   });
 
   describe('POST /api/projects/<projectId>/tasks', () => {
@@ -120,7 +165,7 @@ describe('Project API', () => {
     });
 
     it('throws a NotFound error when the specified project does not exist', () =>
-      expectToThrow(() => client.createTask(333333333, { name: 'Test' }), NotFoundError)
+      expectToThrowAsync(() => client.createTask(333333333, { name: 'Test' }), NotFoundError)
     );
   });
 
@@ -138,7 +183,9 @@ describe('Project API', () => {
     });
 
     it('throws a NotFound error when the specified task does not exist', () =>
-      expectToThrow(() => client.updateTask(333333333, 333333333, { name: 'Test' }), NotFoundError)
+      expectToThrowAsync(
+        () => client.updateTask(333333333, 333333333, { name: 'Test' }), NotFoundError
+      )
     );
   });
 
@@ -147,11 +194,11 @@ describe('Project API', () => {
       const project = await client.createProject({ name: 'Test Project' });
       const task = await client.createTask(project.id, { name: 'Test Task' });
       await client.deleteTask(project.id, task.id);
-      await expectToThrow(() => client.getTask(project.id, task.id), NotFoundError);
+      await expectToThrowAsync(() => client.getTask(project.id, task.id), NotFoundError);
     });
 
     it('throws a NotFound error when the specified task does not exist', () =>
-      expectToThrow(() => client.deleteTask(333333333, 333333333), NotFoundError)
+      expectToThrowAsync(() => client.deleteTask(333333333, 333333333), NotFoundError)
     );
   });
 });

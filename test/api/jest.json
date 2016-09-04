@@ -1,6 +1,6 @@
 {
   "rootDir": ".",
-  "testRegex": ".*\\.js$",
+  "testRegex": ".*Test\\.js$",
   "automock": false,
   "testEnvironment": "node"
 }

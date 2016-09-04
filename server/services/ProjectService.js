@@ -9,6 +9,7 @@ const ProjectService = {
 
       if (project.templateId) {
         const template = await this.getProject(project.templateId, {
+          isTemplate: true,
           includeTasks: true,
           transaction,
         });
@@ -20,6 +21,8 @@ const ProjectService = {
 
       return await db.Project.create({
         name: project.name,
+        isTemplate: project.isTemplate,
+        status: project.isTemplate ? null : 'active',
         tasks,
       }, {
         transaction,
@@ -31,13 +34,10 @@ const ProjectService = {
   async getProject(projectId, options) {
     const project = await db.Project.findById(projectId, this.getProjectSearchOptions(options));
     if (!project) {
-      throw new NotFoundError(`Cannot find project with id = ${projectId}.`);
+      const projectType = (options && options.isTemplate) ? 'project template' : 'project';
+      throw new NotFoundError(`Cannot find ${projectType} with id = ${projectId}.`);
     }
     return project;
-  },
-
-  async getProjects(options) {
-    return await db.Project.findAll(this.getProjectSearchOptions(options));
   },
 
   async updateProject(projectId, updates) {
@@ -52,6 +52,10 @@ const ProjectService = {
       const project = await this.getProject(projectId, { transaction });
       await project.destroy({ transaction });
     });
+  },
+
+  async getProjects(options) {
+    return await db.Project.findAll(this.getProjectSearchOptions(options));
   },
 
   async createTask(projectId, task) {
@@ -88,11 +92,6 @@ const ProjectService = {
     return task;
   },
 
-  async getTasks(projectId) {
-    const project = await this.getProject(projectId, { includeTasks: true });
-    return project.tasks;
-  },
-
   async updateTask(projectId, taskId, updates) {
     await db.execute(async (transaction) => {
       const task = await this.getTask(projectId, taskId, { transaction });
@@ -108,11 +107,23 @@ const ProjectService = {
     });
   },
 
-  getProjectSearchOptions({ includeTasks, transaction } = {}) {
+  async getTasks(projectId) {
+    const project = await this.getProject(projectId, { includeTasks: true });
+    return project.tasks;
+  },
+
+  getProjectSearchOptions({ status, isTemplate, includeTasks, transaction } = {}) {
     const options = {
+      where: {},
       include: [],
       transaction,
     };
+    if (status) {
+      options.where.status = status;
+    }
+    if (!_.isNil(isTemplate)) {
+      options.where.isTemplate = isTemplate;
+    }
     if (includeTasks) {
       options.include.push(db.Task);
     }

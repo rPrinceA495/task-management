@@ -1,7 +1,10 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import Icon from 'react-fa';
-import { SplitButton, MenuItem, ButtonGroup, Button } from 'react-bootstrap';
+import classNames from 'classnames';
+import { Dropdown, MenuItem, SafeAnchor } from 'react-bootstrap';
+import Statuses from '../constants/Statuses';
+import _ from 'lodash';
 
 @observer
 export default class Task extends React.Component {
@@ -11,101 +14,107 @@ export default class Task extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      isSelected: false
-    };
-    this.handleMouseEnter = ::this.handleMouseEnter;
-    this.handleMouseLeave = ::this.handleMouseLeave;
-    this.handleStatusButtonClick = ::this.handleStatusButtonClick;
-    this.handleStatusMenuItemSelect = ::this.handleStatusMenuItemSelect;
+    this.handleStatusIconClick = ::this.handleStatusIconClick;
+    this.handleDeleteClick = ::this.handleDeleteClick;
   }
 
-  handleMouseEnter() {
-    this.setState({
-      isSelected: true
+  handleStatusIconClick() {
+    this.props.task.update({
+      status: this.props.task.status === Statuses.Active ?
+        Statuses.Completed :
+        Statuses.Active,
     });
   }
 
-  handleMouseLeave() {
-    this.setState({
-      isSelected: false
-    });
+  handleDeleteClick() {
+    this.props.task.delete();
   }
 
-  handleStatusButtonClick() {
-    this.props.task.updateStatus('completed');
-  }
-
-  handleStatusMenuItemSelect(eventKey, event) {
-    this.props.task.updateStatus(eventKey);
-  }
-
-  getTextClassName() {
-    if (this.props.task.isUpdating) {
-      return 'text-muted';
-    }
-    switch (this.props.task.status) {
-      case 'active':
-        return 'text-info';
-      case 'completed':
-        return 'text-success';
-      case 'cancelled':
-        return 'text-muted';
-    }
+  handleStatusClick(status) {
+    this.props.task.update({ status });
   }
 
   getIconName() {
-    if (this.props.task.isUpdating) {
-      return 'spinner';
-    }
     switch (this.props.task.status) {
-      case 'active':
-        return 'minus';
-      case 'completed':
-        return 'check';
-      case 'cancelled':
-        return 'ban';
+      case Statuses.Active:
+        return 'circle-o';
+      case Statuses.Completed:
+        return 'check-circle-o';
+      case Statuses.Canceled:
+        return 'stop-circle-o';
+      case Statuses.Paused:
+        return 'pause-circle-o';
     }
   }
 
-  renderIcon() {
+  renderStatusIcon() {
     return (
-      <Icon
-        name={this.getIconName()}
-        spin={this.props.task.isUpdating}
-        fixedWidth />
+      <SafeAnchor onClick={this.handleStatusIconClick}>
+        <Icon
+          name={this.getIconName()}
+          className="text-muted"
+          size="lg"
+          fixedWidth />
+      </SafeAnchor>
+    );
+  }
+
+  getMenuItems() {
+    const items = [];
+    if (!this.props.task.project.isTemplate) {
+      items.push(...this.getStatusMenuItems());
+      items.push(
+        <MenuItem
+          divider
+          key="divider" />
+      );
+    }
+    items.push(
+      <MenuItem
+        onClick={this.handleDeleteClick}
+        key="delete">
+        Delete
+      </MenuItem>
+    );
+    return items;
+  }
+
+  getStatusMenuItems() {
+    return Statuses.All
+      .filter(status => status !== this.props.task.status)
+      .map(status =>
+        <MenuItem
+          onClick={() => this.handleStatusClick(status)}
+          key={status}>
+          Mark as {_.capitalize(status)}
+        </MenuItem>
+      );
+  }
+
+  renderDropdown() {
+    return (
+      <Dropdown pullRight>
+        <SafeAnchor bsRole="toggle">
+          <Icon
+            name="ellipsis-h"
+            size="lg"/>
+        </SafeAnchor>
+        <Dropdown.Menu>
+          {this.getMenuItems()}
+        </Dropdown.Menu>
+      </Dropdown>
     );
   }
 
   render() {
     return (
-      <tr
-        onMouseEnter={this.handleMouseEnter}
-        onMouseLeave={this.handleMouseLeave}>
-        <td className={this.getTextClassName()}>
-          {this.renderIcon()}
-          {' '}
+      <tr>
+        <td>
+          {this.props.task.project.isTemplate || this.renderStatusIcon()}
           {this.props.task.name}
         </td>
-        {/* <td><Icon name="user" fixedWidth /> </td>*/}
         <td className="text-right">
-            Mark as
-            {' '}
-            {/*
-            <ButtonGroup>
-              <Button>Completed</Button>
-              <Button>Cancelled</Button>
-            </ButtonGroup>
-            */}
-
-            <SplitButton
-              title="Completed"
-              onClick={this.handleStatusButtonClick}
-              onSelect={this.handleStatusMenuItemSelect}>
-              <MenuItem eventKey="completed">Completed</MenuItem>
-              <MenuItem eventKey="cancelled">Cancelled</MenuItem>
-            </SplitButton>
-
+          {this.renderDropdown()}
         </td>
       </tr>
     );

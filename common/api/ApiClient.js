@@ -18,15 +18,11 @@ export default class ApiClient {
   }
 
   createProject(project) {
-    return this.axios.post(Urls.projects(), project);
+    return this.axios.post(Urls.projects, project);
   }
 
   getProject(projectId, { includeTasks } = {}) {
     return this.axios.get(Urls.project(projectId), { params: { includeTasks } });
-  }
-
-  getProjects({ includeTasks } = {}) {
-    return this.axios.get(Urls.projects(), { params: { includeTasks } });
   }
 
   updateProject(projectId, updates) {
@@ -37,6 +33,18 @@ export default class ApiClient {
     return this.axios.delete(Urls.project(projectId));
   }
 
+  getProjects({ includeTasks } = {}) {
+    return this.axios.get(Urls.projects, { params: { includeTasks } });
+  }
+
+  getProjectsByStatus(status, { includeTasks } = {}) {
+    return this.axios.get(Urls.projectsByStatus(status), { params: { includeTasks } });
+  }
+
+  getProjectTemplates({ includeTasks } = {}) {
+    return this.axios.get(Urls.projectTemplates, { params: { includeTasks } });
+  }
+
   createTask(projectId, task) {
     return this.axios.post(Urls.tasks(projectId), task);
   }
@@ -45,15 +53,15 @@ export default class ApiClient {
     return this.axios.get(Urls.task(projectId, taskId));
   }
 
-  getTasks(projectId) {
-    return this.axios.get(Urls.tasks(projectId));
-  }
-
   updateTask(projectId, taskId, updates) {
     return this.axios.patch(Urls.task(projectId, taskId), updates);
   }
 
   deleteTask(projectId, taskId) {
     return this.axios.delete(Urls.task(projectId, taskId));
+  }
+
+  getTasks(projectId) {
+    return this.axios.get(Urls.tasks(projectId));
   }
 }

@@ -9,17 +9,19 @@ function createApiRouter() {
 
   const projectRouter = new Router()
     .post('/', projects.createProject)
-    .get('/:projectId', projects.getProject)
-    .get('/', projects.getProjects)
+    .get('/:projectId(\\d+)', projects.getProject)
     .patch('/:projectId', projects.updateProject)
-    .delete('/:projectId', projects.deleteProject);
+    .delete('/:projectId', projects.deleteProject)
+    .get('/', projects.getProjects)
+    .get('/:status(active|completed|canceled|paused)', projects.getProjectsByStatus)
+    .get('/templates', projects.getProjectTemplates);
 
   const taskRouter = new Router()
     .post('/', projects.createTask)
     .get('/:taskId', projects.getTask)
-    .get('/', projects.getTasks)
     .patch('/:taskId', projects.updateTask)
-    .delete('/:taskId', projects.deleteTask);
+    .delete('/:taskId', projects.deleteTask)
+    .get('/', projects.getTasks);
 
   projectRouter.use('/:projectId/tasks', taskRouter.routes());
 

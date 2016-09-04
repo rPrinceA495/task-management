@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import _ from 'lodash';
 
 export default class TaskModel {
   store;
@@ -7,6 +8,7 @@ export default class TaskModel {
   @observable name;
   @observable status;
   @observable isUpdating = false;
+  @observable isDeleting = false;
 
   constructor(store, project, id, name, status) {
     this.store = store;
@@ -16,18 +18,29 @@ export default class TaskModel {
     this.status = status;
   }
 
-  @action async updateStatus(value) {
+  @action async update(updates) {
     this.isUpdating = true;
     try {
-      await this.store.apiClient.updateTask(this.project.id, this.id, {
-        status: value,
-      });
-      this.status = value;
+      await this.store.apiClient.updateTask(this.project.id, this.id, updates);
+      _.assign(this, updates);
     } catch (error) {
       // TODO: handle error
       console.log(error);
     } finally {
       this.isUpdating = false;
+    }
+  }
+
+  @action async delete() {
+    this.isDeleting = true;
+    try {
+      await this.store.apiClient.deleteTask(this.project.id, this.id);
+      this.project.onTaskDeleted(this);
+    } catch (error) {
+      // TODO: handle error
+      console.log(error);
+    } finally {
+      this.isDeleting = false;
     }
   }
 

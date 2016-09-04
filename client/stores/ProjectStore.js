@@ -1,42 +1,70 @@
 import { observable, action } from 'mobx';
 import ProjectModel from '../models/ProjectModel';
+import ListModel from '../models/ListModel';
+import Filters from '../constants/Filters';
+import _ from 'lodash';
 
 export default class ProjectStore {
   apiClient;
-  @observable projects = null;
-  @observable isLoading = false;
+  @observable projects;
+  @observable isCreatingProject = false;
 
   constructor(apiClient) {
     this.apiClient = apiClient;
+    this.projects = {};
+    Filters.All.forEach(filter => {
+      this.projects[filter] = new ListModel(() => this.fetchProjects(filter));
+    });
   }
 
-  @action async loadProjects() {
-    if (this.projects) {
-      return;
-    }
-    this.isLoading = true;
+  @action async loadProjects(filter) {
+    await this.projects[filter].load();
+  }
+
+  getProjects(filter) {
+    return this.projects[filter];
+  }
+
+  @action async createProject({ name, templateId, isTemplate }) {
+    this.isCreatingProject = true;
     try {
-      const result = await this.apiClient.getProjects({ includeTasks: true });
-      this.projects = result.map(project => ProjectModel.fromJS(this, project));
+      const project = this.deserializeProject(await this.apiClient.createProject({
+        name, templateId, isTemplate
+      }));
+      this.getProjectList(project).add(project);
     } catch (error) {
       // TODO: handle error
       console.log(error);
     } finally {
-      this.isLoading = false;
+      this.isCreatingProject = false;
     }
   }
 
-  @action async createProject(name, templateId) {
-    try {
-      const result = await this.apiClient.createProject({ name, templateId });
-      this.projects.push(ProjectModel.fromJS(this, result));
-    } catch (error) {
-      // TODO: handle error
-      console.log(error);
-    }
+  @action onProjectDeleted(project) {
+    this.getProjectList(project).remove(project);
   }
 
-  @action removeProject(project) {
-    this.projects.remove(project);
+  @action onProjectStatusChanged(project, oldStatus, newStatus) {
+    this.projects[oldStatus].remove(project);
+    this.projects[newStatus].add(project);
+  }
+
+  async fetchProjects(filter) {
+    const result = filter === Filters.Templates ?
+      await this.apiClient.getProjectTemplates({ includeTasks: true }) :
+      await this.apiClient.getProjectsByStatus(filter, { includeTasks: true });
+    return this.deserializeProjects(result);
+  }
+
+  deserializeProject(project) {
+    return ProjectModel.fromJS(this, project);
+  }
+
+  deserializeProjects(projects) {
+    return projects.map(project => this.deserializeProject(project));
+  }
+
+  getProjectList(project) {
+    return this.projects[project.isTemplate ? Filters.Templates : project.status];
   }
 }
