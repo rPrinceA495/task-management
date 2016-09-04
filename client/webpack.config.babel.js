@@ -19,7 +19,10 @@ export default {
         loader: 'babel',
       }, {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader'),
+        loader: ExtractTextPlugin.extract('style', 'css'),
+      }, {
+        test: /\.scss$/,
+        loader: ExtractTextPlugin.extract('style', ['css', 'sass']),
       }, {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'url-loader?limit=10000&minetype=application/font-woff',
@@ -37,4 +40,10 @@ export default {
     }),
     new ExtractTextPlugin('bundle.css'),
   ],
+  sassLoader: {
+    precision: 8,
+    includePaths: [
+      path.join(__dirname, '../node_modules/bootstrap-sass/assets/stylesheets'),
+    ],
+  },
 };

@@ -5,7 +5,7 @@ import Root from './components/Root.jsx';
 import ApiClient from '../common/api/ApiClient';
 import ProjectStore from './stores/ProjectStore';
 
-import './styles.css';
+import './assets/styles/main.scss';
 
 const apiClient = new ApiClient('/');
 const projectStore = new ProjectStore(apiClient);
