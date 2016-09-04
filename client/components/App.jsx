@@ -1,28 +1,14 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
-import Icon from 'react-fa';
+import Navbar from './Navbar.jsx';
 
-@observer
-export default class App extends Component {
-  renderNavbar() {
-    return (
-      <Navbar inverse fixedTop>
-        <Navbar.Header>
-          <Navbar.Brand>Task Management</Navbar.Brand>
-        </Navbar.Header>
-      </Navbar>
-    );
-  }
+const App = observer(({ location, children }) =>
+  <div>
+    <Navbar activeHref={location.pathname} />
+    <div className="container">
+      {children}
+    </div>
+  </div>
+);
 
-  render() {
-    return (
-      <div>
-        {this.renderNavbar()}
-        <div className="container">
-          {this.props.children}
-        </div>
-      </div>
-    );
-  }
-}
+export default App;
