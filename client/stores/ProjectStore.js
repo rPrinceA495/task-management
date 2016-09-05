@@ -51,8 +51,8 @@ export default class ProjectStore {
 
   async fetchProjects(filter) {
     const result = filter === Filters.Templates ?
-      await this.apiClient.getProjectTemplates({ includeTasks: true }) :
-      await this.apiClient.getProjectsByStatus(filter, { includeTasks: true });
+      await this.apiClient.getProjectTemplates() :
+      await this.apiClient.getProjectsByStatus(filter);
     return this.deserializeProjects(result);
   }
 

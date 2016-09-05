@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Panel, Dropdown, MenuItem, SafeAnchor, Table } from 'react-bootstrap';
+import { Panel, Dropdown, MenuItem, SafeAnchor, ListGroup, ListGroupItem } from 'react-bootstrap';
 import Icon from 'react-fa';
 import Task from './Task.jsx';
 import CreateProjectModal from './CreateProjectModal.jsx';
@@ -18,23 +18,34 @@ export default class Project extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showCreateProjectModal: false,
+      isCreateProjectModalOpen: false,
+      isExpanded: false,
     };
+    this.handleProjectNameClick = ::this.handleProjectNameClick;
     this.handleCreateProjectClick = ::this.handleCreateProjectClick;
     this.createProject = ::this.createProject;
-    this.hideCreateProjectModal = ::this.hideCreateProjectModal;
+    this.closeCreateProjectModal = ::this.closeCreateProjectModal;
     this.handleDeleteClick = ::this.handleDeleteClick;
     this.createTask = ::this.createTask;
   }
 
+  handleProjectNameClick() {
+    if (!this.state.isExpanded) {
+      this.props.project.tasks.load();
+    }
+    this.setState({
+      isExpanded: !this.state.isExpanded,
+    });
+  }
+
   handleCreateProjectClick() {
     this.setState({
-      showCreateProjectModal: true,
+      isCreateProjectModalOpen: true,
     });
   }
 
   createProject({ name, isTemplate }) {
-    this.hideCreateProjectModal();
+    this.closeCreateProjectModal();
     this.props.projectStore.createProject({
       name,
       templateId: this.props.project.id,
@@ -42,9 +53,9 @@ export default class Project extends Component {
     });
   }
 
-  hideCreateProjectModal() {
+  closeCreateProjectModal() {
     this.setState({
-      showCreateProjectModal: false,
+      isCreateProjectModalOpen: false,
     });
   }
 
@@ -115,14 +126,38 @@ export default class Project extends Component {
 
   renderHeader() {
     return (
-      <div>
-        {this.props.project.name}
-
-        <div className="pull-right">
+      <div className="table-layout">
+        <div className="full-width">
+          <SafeAnchor onClick={this.handleProjectNameClick}>
+            {this.props.project.name}
+          </SafeAnchor>
+        </div>
+        <div>
           {this.renderDropdown()}
         </div>
-
       </div>
+    );
+  }
+
+  renderTasks() {
+    const taskList = this.props.project.tasks;
+    if (taskList.isLoading) {
+      return <div>Loading...</div>;
+    }
+    if (!taskList.items) {
+      return null;
+    }
+    return (
+      <ListGroup fill>
+        <ListGroupItem>
+          <CreateTaskForm onCreate={this.createTask} />
+        </ListGroupItem>
+        {taskList.items.map(task =>
+          <ListGroupItem key={task.id}>
+            <Task task={task} />
+          </ListGroupItem>
+        )}
+      </ListGroup>
     );
   }
 
@@ -132,27 +167,13 @@ export default class Project extends Component {
         <Panel
           header={this.renderHeader()}
           bsStyle="info">
-
-          <Table hover striped fill>
-            <tbody>
-              <tr>
-                <td colSpan="2">
-                  <CreateTaskForm onCreate={this.createTask} />
-                </td>
-              </tr>
-              {this.props.project.tasks && this.props.project.tasks.map(task =>
-                <Task
-                  key={task.id}
-                  task={task} />
-              )}
-            </tbody>
-          </Table>
+          {this.state.isExpanded && this.renderTasks()}
         </Panel>
         {this.props.project.isTemplate &&
           <CreateProjectModal
-            show={this.state.showCreateProjectModal}
-            onCreate={this.createProject}
-            onHide={this.hideCreateProjectModal} />
+            isOpen={this.state.isCreateProjectModalOpen}
+            onCreateProject={this.createProject}
+            onClose={this.closeCreateProjectModal} />
         }
       </div>
     );

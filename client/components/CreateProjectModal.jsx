@@ -5,9 +5,9 @@ import { Modal, Button, FormGroup, ControlLabel, FormControl, Checkbox } from 'r
 @observer
 export default class CreateProjectModal extends Component {
   static propTypes = {
-    show: PropTypes.bool,
-    onCreate: PropTypes.func.isRequired,
-    onHide: PropTypes.func.isRequired,
+    isOpen: PropTypes.bool,
+    onCreateProject: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -16,14 +16,14 @@ export default class CreateProjectModal extends Component {
       name: '',
       isTemplate: false,
     };
-    this.handleShow = ::this.handleShow;
+    this.handleOpen = ::this.handleOpen;
     this.handleNameChange = ::this.handleNameChange;
     this.handleIsTemplateChange = ::this.handleIsTemplateChange;
     this.handleFormSubmit = ::this.handleFormSubmit;
     this.handleCreateClick = ::this.create;
   }
 
-  handleShow() {
+  handleOpen() {
     // TODO: Set focus to Name field
   }
 
@@ -52,15 +52,15 @@ export default class CreateProjectModal extends Component {
 
   create() {
     const { name, isTemplate } = this.state;
-    this.props.onCreate({ name, isTemplate });
+    this.props.onCreateProject({ name, isTemplate });
   }
 
   render() {
     return (
         <Modal
-          show={this.props.show}
-          onShow={this.handleShow}
-          onHide={this.props.onHide}>
+          show={this.props.isOpen}
+          onShow={this.handleOpen}
+          onHide={this.props.onClose}>
           <Modal.Header closeButton>
             <Modal.Title>Create Project</Modal.Title>
           </Modal.Header>
@@ -87,7 +87,7 @@ export default class CreateProjectModal extends Component {
               bsStyle="primary">
               Create
             </Button>
-            <Button onClick={this.props.onHide}>Close</Button>
+            <Button onClick={this.props.onClose}>Close</Button>
           </Modal.Footer>
         </Modal>
     );

@@ -108,15 +108,19 @@ export default class Task extends React.Component {
 
   render() {
     return (
-      <tr>
-        <td>
-          {this.props.task.project.isTemplate || this.renderStatusIcon()}
+      <div className="table-layout">
+        {this.props.task.project.isTemplate ||
+          <div>
+            {this.renderStatusIcon()}
+          </div>
+        }
+        <div className="full-width">
           {this.props.task.name}
-        </td>
-        <td className="text-right">
+        </div>
+        <div>
           {this.renderDropdown()}
-        </td>
-      </tr>
+        </div>
+      </div>
     );
   }
 }

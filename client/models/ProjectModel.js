@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import TaskModel from './TaskModel';
+import ListModel from './ListModel';
 import ApiClient from '../../common/api/ApiClient';
 import _ from 'lodash';
 
@@ -15,14 +16,14 @@ export default class ProjectModel {
   @observable isDeleting = false;
   @observable isCreatingTask = false;
 
-  constructor(store, id, name, description, isTemplate, status, tasks) {
+  constructor(store, id, name, description, isTemplate, status) {
     this.store = store;
     this.id = id;
     this.name = name;
     this.description = description;
     this.isTemplate = isTemplate;
     this.status = status;
-    this.tasks = tasks;
+    this.tasks = new ListModel(::this.fetchTasks);
   }
 
   @action async update(updates) {
@@ -59,7 +60,7 @@ export default class ProjectModel {
     this.isCreatingTask = true;
     try {
       const task = this.deserializeTask(await this.store.apiClient.createTask(this.id, { name }));
-      this.tasks.push(task);
+      this.tasks.add(task);
     } catch (error) {
       // TODO: handle error
       console.log(error);
@@ -70,6 +71,11 @@ export default class ProjectModel {
 
   @action onTaskDeleted(task) {
     this.tasks.remove(task);
+  }
+
+  async fetchTasks() {
+    const result = await this.store.apiClient.getTasks(this.id);
+    return result.map(task => this.deserializeTask(task));
   }
 
   deserializeTask(task) {
@@ -83,21 +89,17 @@ export default class ProjectModel {
       description: this.description,
       isTemplate: this.isTemplate,
       status: this.status,
-      tasks: this.tasks.map(task => task.toJS()),
     };
   }
 
   static fromJS(store, source) {
-    const project = new ProjectModel(
+    return new ProjectModel(
       store,
       source.id,
       source.name,
       source.description,
       source.isTemplate,
-      source.status,
-      [],
+      source.status
     );
-    project.tasks = source.tasks.map(task => TaskModel.fromJS(store, project, task));
-    return project;
   }
 }

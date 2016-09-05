@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Form, FormGroup, FormControl, Button } from 'react-bootstrap';
+import { FormControl, Button } from 'react-bootstrap';
 
 export default class CreateTaskForm extends Component {
   static propTypes = {
@@ -37,23 +37,24 @@ export default class CreateTaskForm extends Component {
 
   render() {
     return (
-      <Form
+      <form
         onSubmit={this.handleSubmit}
-        inline>
-        <FormGroup>
+        className="table-layout">
+        <div className="full-width">
           <FormControl
             type="text"
             value={this.state.name}
             onChange={this.handleNameChange}
             placeholder="New task" />
-        </FormGroup>
-        {' '}
-        <Button
-          disabled={!this.canCreate()}
-          type="submit">
-          Add
-        </Button>
-      </Form>
+        </div>
+        <div>
+          <Button
+            disabled={!this.canCreate()}
+            type="submit">
+            Add
+          </Button>
+        </div>
+      </form>
     );
   }
 }

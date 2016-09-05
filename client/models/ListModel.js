@@ -9,7 +9,7 @@ export default class ListModel {
   }
 
   @action async load() {
-    if (this.items) {
+    if (this.items || this.isLoading) {
       return;
     }
 

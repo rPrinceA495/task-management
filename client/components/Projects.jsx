@@ -16,11 +16,11 @@ export default class Projects extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showProjectModal: false,
+      isCreateProjectModalOpen: false,
     };
     this.handleCreateProjectClick = ::this.handleCreateProjectClick;
     this.createProject = ::this.createProject;
-    this.hideProjectModal = ::this.hideProjectModal;
+    this.closeCreateProjectModal = ::this.closeCreateProjectModal;
   }
 
   componentWillMount() {
@@ -39,18 +39,18 @@ export default class Projects extends Component {
 
   handleCreateProjectClick() {
     this.setState({
-      showProjectModal: true
+      isCreateProjectModalOpen: true
     });
   }
 
   createProject(project) {
-    this.hideProjectModal();
+    this.closeCreateProjectModal();
     this.props.projectStore.createProject(project);
   }
 
-  hideProjectModal() {
+  closeCreateProjectModal() {
     this.setState({
-      showProjectModal: false,
+      isCreateProjectModalOpen: false,
     });
   }
 
@@ -119,9 +119,9 @@ export default class Projects extends Component {
         {this.renderProjects()}
 
         <CreateProjectModal
-          show={this.state.showProjectModal}
-          onCreate={this.createProject}
-          onHide={this.hideProjectModal} />
+          isOpen={this.state.isCreateProjectModalOpen}
+          onCreateProject={this.createProject}
+          onClose={this.closeCreateProjectModal} />
 
       </div>
     );
