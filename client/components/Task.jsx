@@ -59,6 +59,18 @@ export default class Task extends React.Component {
     );
   }
 
+  renderName() {
+    if (this.props.task.status === Statuses.Completed ||
+      this.props.task.status === Statuses.Canceled) {
+      return (
+        <s className="text-muted">
+          {this.props.task.name}
+        </s>
+      );
+    }
+    return this.props.task.name;
+  }
+
   getMenuItems() {
     const items = [];
     if (!this.props.task.project.isTemplate) {
@@ -115,7 +127,7 @@ export default class Task extends React.Component {
           </div>
         }
         <div className="full-width">
-          {this.props.task.name}
+          {this.renderName()}
         </div>
         <div>
           {this.renderDropdown()}
