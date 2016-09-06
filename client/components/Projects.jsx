@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router';
-import { Button, ButtonGroup } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import Icon from 'react-fa';
 import Project from './Project.jsx';
+import ProjectsSubnav from './ProjectsSubnav.jsx';
 import CreateProjectModal from './CreateProjectModal.jsx';
 import Loader from './Loader.jsx';
-import Filters from '../constants/Filters';
 import _ from 'lodash';
 
 @inject('projectStore')
-@withRouter
 @observer
 export default class Projects extends Component {
   constructor(props) {
@@ -54,27 +52,6 @@ export default class Projects extends Component {
     });
   }
 
-  renderSubNav() {
-    return (
-      <ButtonGroup>
-        {Filters.All.map(filter => this.renderSubNavItem(filter))}
-      </ButtonGroup>
-    );
-  }
-
-  renderSubNavItem(filter) {
-    const router = this.props.router;
-    const path = `/projects/${filter}`;
-    return (
-      <Button
-        href={router.createHref(path)}
-        bsStyle={router.isActive(path) ? 'primary' : 'default'}
-        key={filter}>
-        {_.capitalize(filter)}
-      </Button>
-    );
-  }
-
   renderProjects() {
     const projectList = this.props.projectStore.getProjects(this.props.route.filter);
 
@@ -103,7 +80,7 @@ export default class Projects extends Component {
         <div className="subnav-container">
           <div className="clearfix">
             <div className="pull-left">
-              {this.renderSubNav()}
+              <ProjectsSubnav />
             </div>
 
             <div className="pull-right">

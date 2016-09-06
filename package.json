@@ -36,7 +36,8 @@
     "sequelize": "^3.24.1",
     "mysql": "^2.11.1",
     "babel-polyfill": "^6.13.0",
-    "mz": "^2.4.0"
+    "mz": "^2.4.0",
+    "react-media": "^1.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.14.0",
