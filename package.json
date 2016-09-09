@@ -81,6 +81,7 @@
     "test:api": "jest --config test/api/jest.json",
     "test": "npm run test:api",
     "lint": "eslint client server common --ext .js,.jsx",
-    "recreatedb": "cross-env NODE_ENV=development babel-node server/recreateDB.js"
+    "create-tables": "cross-env NODE_ENV=development babel-node server/createTables.js",
+    "recreate-tables": "cross-env NODE_ENV=development babel-node server/createTables.js --force"
   }
 }
