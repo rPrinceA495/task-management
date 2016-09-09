@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { withRouter } from 'react-router';
 import { Navbar as BootstrapNavbar, Nav, NavItem } from 'react-bootstrap';
 

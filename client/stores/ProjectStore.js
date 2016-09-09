@@ -2,7 +2,6 @@ import { observable, action } from 'mobx';
 import ProjectModel from '../models/ProjectModel';
 import ListModel from '../models/ListModel';
 import Filters from '../constants/Filters';
-import _ from 'lodash';
 
 export default class ProjectStore {
   apiClient;
@@ -29,7 +28,9 @@ export default class ProjectStore {
     this.isCreatingProject = true;
     try {
       const project = this.deserializeProject(await this.apiClient.createProject({
-        name, templateId, isTemplate
+        name,
+        templateId,
+        isTemplate,
       }));
       this.getProjectList(project).add(project);
     } catch (error) {

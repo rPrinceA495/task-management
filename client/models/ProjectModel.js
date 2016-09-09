@@ -1,8 +1,7 @@
 import { observable, action } from 'mobx';
+import _ from 'lodash';
 import TaskModel from './TaskModel';
 import ListModel from './ListModel';
-import ApiClient from '../../common/api/ApiClient';
-import _ from 'lodash';
 
 export default class ProjectModel {
   store;

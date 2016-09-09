@@ -2,12 +2,12 @@ import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import hbs from 'koa-hbs';
 import serveStatic from 'koa-static';
-import configureRoutes from './configureRoutes';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'koa-webpack-dev-middleware';
 // import webpackHotMiddleware from 'koa-webpack-hot-middleware';
 import convert from 'koa-convert';
 import path from 'path';
+import configureRoutes from './configureRoutes';
 
 const app = new Koa();
 

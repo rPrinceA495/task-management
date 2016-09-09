@@ -1,6 +1,6 @@
+import _ from 'lodash';
 import db from '../db';
 import NotFoundError from '../../common/errors/NotFoundError';
-import _ from 'lodash';
 
 const ProjectService = {
   async createProject(project) {
@@ -65,7 +65,7 @@ const ProjectService = {
         transaction,
       });
       // TODO: task.position
-      const lastTask = _.maxBy(project.tasks, task => task.position);
+      const lastTask = _.maxBy(project.tasks, t => t.position);
       return await db.Task.create({
         projectId,
         name: task.name,

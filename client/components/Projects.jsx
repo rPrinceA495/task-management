@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button } from 'react-bootstrap';
 import Icon from 'react-fa';
+import _ from 'lodash';
 import Project from './Project.jsx';
 import ProjectsSubnav from './ProjectsSubnav.jsx';
 import CreateProjectModal from './CreateProjectModal.jsx';
 import Loader from './Loader.jsx';
-import _ from 'lodash';
 
 @inject('projectStore')
 @observer

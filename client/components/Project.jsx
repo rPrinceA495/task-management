@@ -2,11 +2,11 @@ import React, { Component, PropTypes } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Panel, Dropdown, MenuItem, SafeAnchor, ListGroup, ListGroupItem } from 'react-bootstrap';
 import Icon from 'react-fa';
+import _ from 'lodash';
 import Task from './Task.jsx';
 import CreateProjectModal from './CreateProjectModal.jsx';
 import CreateTaskForm from './CreateTaskForm.jsx';
 import Statuses from '../constants/Statuses';
-import _ from 'lodash';
 
 @inject('projectStore')
 @observer
@@ -115,7 +115,7 @@ export default class Project extends Component {
         <SafeAnchor bsRole="toggle">
           <Icon
             name="ellipsis-h"
-            size="lg"/>
+            size="lg" />
         </SafeAnchor>
         <Dropdown.Menu>
           {this.getMenuItems()}

@@ -2,8 +2,8 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import { Button, ButtonGroup, DropdownButton, MenuItem } from 'react-bootstrap';
 import Media from 'react-media';
-import Filters from '../constants/Filters';
 import _ from 'lodash';
+import Filters from '../constants/Filters';
 
 const getPath = filter => `/projects/${filter}`;
 

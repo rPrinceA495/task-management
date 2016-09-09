@@ -1,7 +1,5 @@
 import Axios from 'axios';
 import * as Urls from './ApiUrls';
-import NotFoundError from '../errors/NotFoundError';
-import ServiceError from '../errors/ServiceError';
 import { throwIfNotSuccessful } from './ApiHelper';
 
 export default class ApiClient {

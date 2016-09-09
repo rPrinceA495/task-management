@@ -30,7 +30,8 @@ const Project = sequelize.define('project', {
     defaultValue: false,
   },
   status: {
-    type: Sequelize.ENUM('active', 'completed', 'canceled', 'paused'), // eslint-disable-line new-cap
+    // eslint-disable-next-line new-cap
+    type: Sequelize.ENUM('active', 'completed', 'canceled', 'paused'),
     allowNull: true,
   },
 });
@@ -50,7 +51,8 @@ const Task = sequelize.define('task', {
     allowNull: false,
   },
   status: {
-    type: Sequelize.ENUM('active', 'completed', 'canceled', 'paused'), // eslint-disable-line new-cap
+    // eslint-disable-next-line new-cap
+    type: Sequelize.ENUM('active', 'completed', 'canceled', 'paused'),
     allowNull: false,
     defaultValue: 'active',
   },

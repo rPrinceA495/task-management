@@ -57,39 +57,39 @@ export default class CreateProjectModal extends Component {
 
   render() {
     return (
-        <Modal
-          show={this.props.isOpen}
-          onShow={this.handleOpen}
-          onHide={this.props.onClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Create Project</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <form onSubmit={this.handleFormSubmit}>
-              <FormGroup controlId="projectName">
-                <ControlLabel>Name</ControlLabel>
-                <FormControl
-                  type="text"
-                  value={this.state.name}
-                  onChange={this.handleNameChange} />
-              </FormGroup>
-              <Checkbox
-                checked={this.state.isTemplate}
-                onChange={this.handleIsTemplateChange}>
-                This is a project template
-              </Checkbox>
-            </form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              onClick={this.handleCreateClick}
-              disabled={!this.canCreate()}
-              bsStyle="primary">
-              Create
-            </Button>
-            <Button onClick={this.props.onClose}>Close</Button>
-          </Modal.Footer>
-        </Modal>
+      <Modal
+        show={this.props.isOpen}
+        onShow={this.handleOpen}
+        onHide={this.props.onClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Create Project</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={this.handleFormSubmit}>
+            <FormGroup controlId="projectName">
+              <ControlLabel>Name</ControlLabel>
+              <FormControl
+                type="text"
+                value={this.state.name}
+                onChange={this.handleNameChange} />
+            </FormGroup>
+            <Checkbox
+              checked={this.state.isTemplate}
+              onChange={this.handleIsTemplateChange}>
+              This is a project template
+            </Checkbox>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={this.handleCreateClick}
+            disabled={!this.canCreate()}
+            bsStyle="primary">
+            Create
+          </Button>
+          <Button onClick={this.props.onClose}>Close</Button>
+        </Modal.Footer>
+      </Modal>
     );
   }
 }

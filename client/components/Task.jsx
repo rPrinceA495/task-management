@@ -1,10 +1,9 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import Icon from 'react-fa';
-import classNames from 'classnames';
 import { Dropdown, MenuItem, SafeAnchor } from 'react-bootstrap';
-import Statuses from '../constants/Statuses';
 import _ from 'lodash';
+import Statuses from '../constants/Statuses';
 
 @observer
 export default class Task extends React.Component {
@@ -109,7 +108,7 @@ export default class Task extends React.Component {
         <SafeAnchor bsRole="toggle">
           <Icon
             name="ellipsis-h"
-            size="lg"/>
+            size="lg" />
         </SafeAnchor>
         <Dropdown.Menu>
           {this.getMenuItems()}
