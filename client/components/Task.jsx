@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import Icon from 'react-fa';
 import { Dropdown, MenuItem, SafeAnchor } from 'react-bootstrap';
 import _ from 'lodash';
+import MenuToggle from './MenuToggle.jsx';
 import Statuses from '../constants/Statuses';
 
 @observer
@@ -104,12 +105,10 @@ export default class Task extends React.Component {
 
   renderDropdown() {
     return (
-      <Dropdown pullRight>
-        <SafeAnchor bsRole="toggle">
-          <Icon
-            name="ellipsis-h"
-            size="lg" />
-        </SafeAnchor>
+      <Dropdown
+        id={`task-menu-${this.props.task.id}`}
+        pullRight>
+        <MenuToggle bsRole="toggle" />
         <Dropdown.Menu>
           {this.getMenuItems()}
         </Dropdown.Menu>

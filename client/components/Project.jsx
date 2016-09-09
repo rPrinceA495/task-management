@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Panel, Dropdown, MenuItem, SafeAnchor, ListGroup, ListGroupItem } from 'react-bootstrap';
-import Icon from 'react-fa';
+import { Panel, Dropdown, MenuItem, ListGroup, ListGroupItem } from 'react-bootstrap';
 import _ from 'lodash';
 import Task from './Task.jsx';
 import CreateProjectModal from './CreateProjectModal.jsx';
 import CreateTaskForm from './CreateTaskForm.jsx';
+import MenuToggle from './MenuToggle.jsx';
 import Statuses from '../constants/Statuses';
 
 @inject('projectStore')
@@ -29,7 +29,8 @@ export default class Project extends Component {
     this.createTask = ::this.createTask;
   }
 
-  handleProjectNameClick() {
+  handleProjectNameClick(event) {
+    event.preventDefault();
     if (!this.state.isExpanded) {
       this.props.project.tasks.load();
     }
@@ -111,12 +112,10 @@ export default class Project extends Component {
 
   renderDropdown() {
     return (
-      <Dropdown pullRight>
-        <SafeAnchor bsRole="toggle">
-          <Icon
-            name="ellipsis-h"
-            size="lg" />
-        </SafeAnchor>
+      <Dropdown
+        id={`project-menu-${this.props.project.id}`}
+        pullRight>
+        <MenuToggle bsRole="toggle" />
         <Dropdown.Menu>
           {this.getMenuItems()}
         </Dropdown.Menu>
@@ -128,9 +127,9 @@ export default class Project extends Component {
     return (
       <div className="table-layout">
         <div className="full-width">
-          <SafeAnchor onClick={this.handleProjectNameClick}>
+          <a href="" onClick={this.handleProjectNameClick}>
             {this.props.project.name}
-          </SafeAnchor>
+          </a>
         </div>
         <div>
           {this.renderDropdown()}
