@@ -1,12 +1,32 @@
 import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import ManifestPlugin from 'webpack-manifest-plugin';
+
+function getBundleName(ext) {
+  return process.env.NODE_ENV === 'production' ? `bundle-[hash].${ext}` : `bundle.${ext}`;
+}
+
+function getPlugins() {
+  const plugins = [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      },
+    }),
+    new ExtractTextPlugin(getBundleName('css')),
+  ];
+  if (process.env.NODE_ENV === 'production') {
+    plugins.push(new ManifestPlugin());
+  }
+  return plugins;
+}
 
 export default {
   entry: path.join(__dirname, 'index.jsx'),
   output: {
     path: path.join(__dirname, '../dist/client'),
-    filename: 'bundle.js',
+    filename: getBundleName('js'),
   },
   module: {
     loaders: [
@@ -32,14 +52,7 @@ export default {
       },
     ],
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      },
-    }),
-    new ExtractTextPlugin('bundle.css'),
-  ],
+  plugins: getPlugins(),
   sassLoader: {
     precision: 8,
     includePaths: [

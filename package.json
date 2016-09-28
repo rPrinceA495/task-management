@@ -67,7 +67,8 @@
     "cross-env": "^2.0.1",
     "copyfiles": "^1.0.0",
     "bootstrap-sass": "^3.3.7",
-    "node-sass": "^3.9.3"
+    "node-sass": "^3.9.3",
+    "webpack-manifest-plugin": "^1.0.1"
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon server/index.js --watch server common --exec babel-node",
