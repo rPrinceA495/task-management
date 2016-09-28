@@ -23,6 +23,7 @@ export default class CreateProjectModal extends Component {
     this.handleCreateClick = ::this.create;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   handleOpen() {
     // TODO: Set focus to Name field
   }

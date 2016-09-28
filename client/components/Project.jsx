@@ -13,6 +13,7 @@ import Statuses from '../constants/Statuses';
 export default class Project extends Component {
   static propTypes = {
     project: PropTypes.object.isRequired,
+    projectStore: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -60,7 +61,7 @@ export default class Project extends Component {
     });
   }
 
-  handleDeleteClick(event) {
+  handleDeleteClick() {
     this.props.project.delete();
   }
 

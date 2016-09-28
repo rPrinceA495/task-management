@@ -44,6 +44,8 @@ export default class Task extends React.Component {
         return 'stop-circle-o';
       case Statuses.Paused:
         return 'pause-circle-o';
+      default:
+        return null;
     }
   }
 

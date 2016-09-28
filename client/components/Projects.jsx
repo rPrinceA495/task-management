@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Button } from 'react-bootstrap';
 import Icon from 'react-fa';
-import _ from 'lodash';
 import Project from './Project.jsx';
 import ProjectsSubnav from './ProjectsSubnav.jsx';
 import CreateProjectModal from './CreateProjectModal.jsx';
@@ -11,6 +10,11 @@ import Loader from './Loader.jsx';
 @inject('projectStore')
 @observer
 export default class Projects extends Component {
+  static propTypes = {
+    projectStore: PropTypes.object.isRequired,
+    route: PropTypes.object.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -37,7 +41,7 @@ export default class Projects extends Component {
 
   handleCreateProjectClick() {
     this.setState({
-      isCreateProjectModalOpen: true
+      isCreateProjectModalOpen: true,
     });
   }
 

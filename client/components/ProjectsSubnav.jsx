@@ -38,7 +38,7 @@ const DropdownSubnav = withRouter(({ router }) =>
 
 const ProjectsSubnav = () =>
   <Media query="(min-width: 768px)">
-    {matches => matches ? <ButtonSubnav /> : <DropdownSubnav />}
+    {matches => (matches ? <ButtonSubnav /> : <DropdownSubnav />)}
   </Media>;
 
 export default ProjectsSubnav;

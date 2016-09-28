@@ -1,8 +1,6 @@
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import serveStatic from 'koa-static';
-import webpack from 'webpack';
-import webpackDevMiddleware from 'koa-webpack-dev-middleware';
 import convert from 'koa-convert';
 import path from 'path';
 import configureRoutes from './configureRoutes';
@@ -28,7 +26,10 @@ if (process.env.NODE_ENV === 'production') {
   app.use(serveStatic(path.join(__dirname, '../client')));
 } else {
   console.log('Setting up webpack middleware...');
+  const webpack = require('webpack');
+  const webpackDevMiddleware = require('koa-webpack-dev-middleware');
   const webpackConfig = require('../client/webpack.config.babel').default;
+
   const compiler = webpack(webpackConfig);
   app.use(convert(webpackDevMiddleware(compiler, { noInfo: true })));
 }
