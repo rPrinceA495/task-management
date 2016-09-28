@@ -3,7 +3,7 @@ import bodyParser from 'koa-bodyparser';
 import serveStatic from 'koa-static';
 import convert from 'koa-convert';
 import path from 'path';
-import configureRoutes from './configureRoutes';
+import routes from './routes';
 
 const app = new Koa();
 
@@ -18,7 +18,7 @@ app.use(async (ctx, next) => {
 
 app.use(bodyParser());
 
-configureRoutes(app);
+app.use(routes());
 
 console.log('NODE_ENV =', process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'production') {

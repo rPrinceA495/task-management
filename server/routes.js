@@ -30,7 +30,7 @@ function createApiRouter() {
   return router;
 }
 
-export default function configureRoutes(app) {
+export default function routes() {
   const router = new Router();
 
   router.get('/', index);
@@ -38,5 +38,5 @@ export default function configureRoutes(app) {
   const apiRouter = createApiRouter();
   router.use('/api', apiRouter.routes());
 
-  app.use(router.routes());
+  return router.routes();
 }
