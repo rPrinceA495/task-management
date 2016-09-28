@@ -1,10 +1,8 @@
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
-import hbs from 'koa-hbs';
 import serveStatic from 'koa-static';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'koa-webpack-dev-middleware';
-// import webpackHotMiddleware from 'koa-webpack-hot-middleware';
 import convert from 'koa-convert';
 import path from 'path';
 import configureRoutes from './configureRoutes';
@@ -20,10 +18,6 @@ app.use(async (ctx, next) => {
   }
 });
 
-app.use(convert(hbs.middleware({
-  viewPath: path.join(__dirname, 'views'),
-})));
-
 app.use(bodyParser());
 
 configureRoutes(app);
@@ -37,7 +31,6 @@ if (process.env.NODE_ENV === 'production') {
   const webpackConfig = require('../client/webpack.config.babel').default;
   const compiler = webpack(webpackConfig);
   app.use(convert(webpackDevMiddleware(compiler, { noInfo: true })));
-  // app.use(webpackHotMiddleware(compiler, { noInfo: true }));
 }
 
 const port = process.env.PORT || 5555;
