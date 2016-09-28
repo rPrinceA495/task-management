@@ -1,6 +1,7 @@
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import serveStatic from 'koa-static';
+import compress from 'koa-compress';
 import convert from 'koa-convert';
 import path from 'path';
 import routes from './routes';
@@ -16,8 +17,8 @@ app.use(async (ctx, next) => {
   }
 });
 
+app.use(compress());
 app.use(bodyParser());
-
 app.use(routes());
 
 console.log('NODE_ENV =', process.env.NODE_ENV);
