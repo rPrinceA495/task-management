@@ -5,6 +5,8 @@ import ListModel from './ListModel';
 
 export default class ProjectModel {
   store;
+  apiClient;
+  notificationStore;
   id;
   @observable name;
   @observable description;
@@ -15,8 +17,19 @@ export default class ProjectModel {
   @observable isDeleting = false;
   @observable isCreatingTask = false;
 
-  constructor(store, id, name, description, isTemplate, status) {
+  constructor(
+    store,
+    apiClient,
+    notificationStore,
+    id,
+    name,
+    description,
+    isTemplate,
+    status
+  ) {
     this.store = store;
+    this.apiClient = apiClient;
+    this.notificationStore = notificationStore;
     this.id = id;
     this.name = name;
     this.description = description;
@@ -29,14 +42,14 @@ export default class ProjectModel {
     this.isUpdating = true;
     try {
       const originalStatus = this.status;
-      await this.store.apiClient.updateProject(this.id, updates);
+      await this.apiClient.updateProject(this.id, updates);
       _.assign(this, updates);
       if (updates.status && updates.status !== originalStatus) {
         this.store.onProjectStatusChanged(this, originalStatus, updates.status);
       }
     } catch (error) {
-      // TODO: handle error
-      console.log(error);
+      console.log('Error while updating project.', error);
+      this.notificationStore.error();
     } finally {
       this.isUpdating = false;
     }
@@ -45,11 +58,11 @@ export default class ProjectModel {
   @action async delete() {
     this.isDeleting = true;
     try {
-      await this.store.apiClient.deleteProject(this.id);
+      await this.apiClient.deleteProject(this.id);
       this.store.onProjectDeleted(this);
     } catch (error) {
-      // TODO: handle error
-      console.log(error);
+      console.log('Error while deleting project.', error);
+      this.notificationStore.error();
     } finally {
       this.isDeleting = false;
     }
@@ -58,11 +71,11 @@ export default class ProjectModel {
   @action async createTask(name) {
     this.isCreatingTask = true;
     try {
-      const task = this.deserializeTask(await this.store.apiClient.createTask(this.id, { name }));
+      const task = this.deserializeTask(await this.apiClient.createTask(this.id, { name }));
       this.tasks.add(task);
     } catch (error) {
-      // TODO: handle error
-      console.log(error);
+      console.log('Error while creating task.', error);
+      this.notificationStore.error();
     } finally {
       this.isCreatingTask = false;
     }
@@ -73,12 +86,18 @@ export default class ProjectModel {
   }
 
   async fetchTasks() {
-    const result = await this.store.apiClient.getTasks(this.id);
+    const result = await this.apiClient.getTasks(this.id);
     return result.map(task => this.deserializeTask(task));
   }
 
   deserializeTask(task) {
-    return TaskModel.fromJS(this.store, this, task);
+    return TaskModel.fromJS(
+      this.store,
+      this.apiClient,
+      this.notificationStore,
+      this,
+      task
+    );
   }
 
   toJS() {
@@ -91,9 +110,11 @@ export default class ProjectModel {
     };
   }
 
-  static fromJS(store, source) {
+  static fromJS(store, apiClient, notificationStore, source) {
     return new ProjectModel(
       store,
+      apiClient,
+      notificationStore,
       source.id,
       source.name,
       source.description,

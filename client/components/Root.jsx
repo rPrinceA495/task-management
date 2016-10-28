@@ -6,7 +6,9 @@ import App from './App.jsx';
 import Projects from './Projects.jsx';
 
 const Root = observer(props =>
-  <Provider projectStore={props.projectStore}>
+  <Provider
+    projectStore={props.projectStore}
+    notificationStore={props.notificationStore}>
     <Router history={hashHistory}>
       <Route path="/" component={App}>
         <IndexRedirect to="projects" />

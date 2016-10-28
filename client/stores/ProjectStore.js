@@ -5,11 +5,13 @@ import Filters from '../constants/Filters';
 
 export default class ProjectStore {
   apiClient;
+  notificationStore;
   @observable projects;
   @observable isCreatingProject = false;
 
-  constructor(apiClient) {
+  constructor(apiClient, notificationStore) {
     this.apiClient = apiClient;
+    this.notificationStore = notificationStore;
     this.projects = {};
     Filters.All.forEach(filter => {
       this.projects[filter] = new ListModel(() => this.fetchProjects(filter));
@@ -34,8 +36,8 @@ export default class ProjectStore {
       }));
       this.getProjectList(project).add(project);
     } catch (error) {
-      // TODO: handle error
-      console.log(error);
+      console.log('Error while creating project.' , error);
+      this.notificationStore.error();
     } finally {
       this.isCreatingProject = false;
     }
@@ -58,7 +60,12 @@ export default class ProjectStore {
   }
 
   deserializeProject(project) {
-    return ProjectModel.fromJS(this, project);
+    return ProjectModel.fromJS(
+      this,
+      this.apiClient,
+      this.notificationStore,
+      project
+    );
   }
 
   deserializeProjects(projects) {
