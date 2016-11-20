@@ -1,4 +1,5 @@
 @import "_bootstrap-custom";
+@import "projects";
 
 html {
   position: relative;
@@ -24,22 +25,14 @@ footer {
   }
 }
 
-.subnav-container {
-  margin-bottom: 20px;
-}
+button.menu-toggle {
+  background-color: inherit;
+  border: none;
+  padding: 10px;
+  outline: 0;
 
-.table-layout {
-  display: table;
-
-  > * {
-    display: table-cell;
-  }
-
-  > * + * {
-    padding-left: 10px;
-  }
-
-  > .full-width {
-    width: 100%;
+  &:focus,
+  &:hover {
+    opacity: 0.7;
   }
 }

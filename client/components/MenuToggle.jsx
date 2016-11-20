@@ -8,19 +8,19 @@ export default class MenuToggle extends Component {
   }
 
   handleClick(event) {
-    event.preventDefault();
+    event.stopPropagation();
     this.props.onClick();
   }
 
   render() {
     return (
-      <a
-        href=""
-        onClick={this.handleClick}>
+      <button
+        onClick={this.handleClick}
+        className="menu-toggle">
         <Icon
           name="ellipsis-h"
           size="lg" />
-      </a>
+      </button>
     );
   }
 }

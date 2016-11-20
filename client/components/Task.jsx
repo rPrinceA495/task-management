@@ -54,9 +54,7 @@ export default class Task extends React.Component {
       <SafeAnchor onClick={this.handleStatusIconClick}>
         <Icon
           name={this.getIconName()}
-          className="text-muted"
-          size="lg"
-          fixedWidth />
+          className="text-muted" />
       </SafeAnchor>
     );
   }
@@ -71,6 +69,15 @@ export default class Task extends React.Component {
       );
     }
     return this.props.task.name;
+  }
+
+  renderDetails() {
+    return (
+      <p>
+        <Icon name="user-circle" /> Not assigned
+        {/* <li><Icon name="calendar-o" /> Due date</li> */}
+      </p>
+    );
   }
 
   getMenuItems() {
@@ -120,19 +127,20 @@ export default class Task extends React.Component {
 
   render() {
     return (
-      <div className="table-layout">
+      <li className="task">
         {this.props.task.project.isTemplate ||
-          <div>
+          <div className="task-icon">
             {this.renderStatusIcon()}
           </div>
         }
-        <div className="full-width">
-          {this.renderName()}
+        <div className="task-main">
+          <h5>{this.renderName()}</h5>
+          {this.renderDetails()}
         </div>
         <div>
           {this.renderDropdown()}
         </div>
-      </div>
+      </li>
     );
   }
 }

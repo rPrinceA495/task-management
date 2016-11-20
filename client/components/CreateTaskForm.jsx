@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { FormControl, Button } from 'react-bootstrap';
+import Icon from 'react-fa';
 
 export default class CreateTaskForm extends Component {
   static propTypes = {
@@ -39,21 +40,19 @@ export default class CreateTaskForm extends Component {
     return (
       <form
         onSubmit={this.handleSubmit}
-        className="table-layout">
-        <div className="full-width">
-          <FormControl
-            type="text"
-            value={this.state.name}
-            onChange={this.handleNameChange}
-            placeholder="New task" />
-        </div>
-        <div>
-          <Button
-            disabled={!this.canCreate()}
-            type="submit">
-            Add
-          </Button>
-        </div>
+        className="create-task-form">
+        <FormControl
+          type="text"
+          value={this.state.name}
+          onChange={this.handleNameChange}
+          placeholder="Add new task" />
+
+        <Button
+          disabled={!this.canCreate()}
+          type="submit"
+          bsStyle="success">
+          Add
+        </Button>
       </form>
     );
   }

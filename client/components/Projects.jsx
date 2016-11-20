@@ -68,33 +68,26 @@ export default class Projects extends Component {
     }
 
     return (
-      <div>
+      <ul className="project-list">
         {projectList.items.map(project =>
           <Project
             key={project.id}
             project={project} />
         )}
-      </div>
+      </ul>
     );
   }
 
   render() {
     return (
       <div>
-        <div className="subnav-container">
-          <div className="clearfix">
-            <div className="pull-left">
-              <ProjectsSubnav />
-            </div>
-
-            <div className="pull-right">
-              <Button
-                onClick={this.handleCreateProjectClick}
-                bsStyle="success">
-                <Icon name="plus" /> Create Project
-              </Button>
-            </div>
-          </div>
+        <div className="projects-page-head">
+          <ProjectsSubnav />
+          <Button
+            onClick={this.handleCreateProjectClick}
+            bsStyle="success">
+            <Icon name="plus" /> Create Project
+          </Button>
         </div>
 
         {this.renderProjects()}

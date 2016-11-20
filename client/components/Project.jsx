@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Panel, Dropdown, MenuItem, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Panel, Dropdown, MenuItem } from 'react-bootstrap';
+import Icon from 'react-fa';
+import classNames from 'classnames';
 import _ from 'lodash';
 import Task from './Task.jsx';
 import CreateProjectModal from './CreateProjectModal.jsx';
@@ -22,7 +24,7 @@ export default class Project extends Component {
       isCreateProjectModalOpen: false,
       isExpanded: false,
     };
-    this.handleProjectNameClick = ::this.handleProjectNameClick;
+    this.handleProjectHeaderClick = ::this.handleProjectHeaderClick;
     this.handleCreateProjectClick = ::this.handleCreateProjectClick;
     this.createProject = ::this.createProject;
     this.closeCreateProjectModal = ::this.closeCreateProjectModal;
@@ -30,7 +32,7 @@ export default class Project extends Component {
     this.createTask = ::this.createTask;
   }
 
-  handleProjectNameClick(event) {
+  handleProjectHeaderClick(event) {
     event.preventDefault();
     if (!this.state.isExpanded) {
       this.props.project.tasks.load();
@@ -40,7 +42,8 @@ export default class Project extends Component {
     });
   }
 
-  handleCreateProjectClick() {
+  handleCreateProjectClick(event) {
+    event.stopPropagation();
     this.setState({
       isCreateProjectModalOpen: true,
     });
@@ -61,11 +64,13 @@ export default class Project extends Component {
     });
   }
 
-  handleDeleteClick() {
+  handleDeleteClick(event) {
+    event.stopPropagation();
     this.props.project.delete();
   }
 
-  handleStatusClick(status) {
+  handleStatusClick(event, status) {
+    event.stopPropagation();
     this.props.project.update({ status });
   }
 
@@ -104,7 +109,7 @@ export default class Project extends Component {
       .filter(status => status !== this.props.project.status)
       .map(status =>
         <MenuItem
-          onClick={() => this.handleStatusClick(status)}
+          onClick={event => this.handleStatusClick(event, status)}
           key={status}>
           Mark as {_.capitalize(status)}
         </MenuItem>
@@ -126,11 +131,15 @@ export default class Project extends Component {
 
   renderHeader() {
     return (
-      <div className="table-layout">
-        <div className="full-width">
-          <a href="" onClick={this.handleProjectNameClick}>
-            {this.props.project.name}
-          </a>
+      <div
+        onClick={this.handleProjectHeaderClick}
+        className="project-header">
+        <div className="project-icon">
+          <Icon name={this.state.isExpanded ? 'chevron-down' : 'chevron-right'} />
+        </div>
+        <div className="project-header-main">
+          <h4>{this.props.project.name}</h4>
+          <p>0 active tasks</p>
         </div>
         <div>
           {this.renderDropdown()}
@@ -139,43 +148,41 @@ export default class Project extends Component {
     );
   }
 
-  renderTasks() {
+  renderBody() {
     const taskList = this.props.project.tasks;
     if (taskList.isLoading) {
-      return <div>Loading...</div>;
+      return null; // TODO: Show loader
     }
     if (!taskList.items) {
       return null;
     }
     return (
-      <ListGroup fill>
-        <ListGroupItem>
-          <CreateTaskForm onCreate={this.createTask} />
-        </ListGroupItem>
-        {taskList.items.map(task =>
-          <ListGroupItem key={task.id}>
-            <Task task={task} />
-          </ListGroupItem>
-        )}
-      </ListGroup>
+      <div className="project-body">
+        <CreateTaskForm onCreate={this.createTask} />
+        <ul className="task-list">
+          {taskList.items.map(task =>
+            <Task
+              task={task}
+              key={task.id} />
+          )}
+        </ul>
+      </div>
     );
   }
 
   render() {
     return (
-      <div>
-        <Panel
-          header={this.renderHeader()}
-          bsStyle="info">
-          {this.state.isExpanded && this.renderTasks()}
-        </Panel>
+      <li className={classNames('project', { expanded: this.state.isExpanded })}>
+        {this.renderHeader()}
+        {this.state.isExpanded && this.renderBody()}
+
         {this.props.project.isTemplate &&
           <CreateProjectModal
             isOpen={this.state.isCreateProjectModalOpen}
             onCreateProject={this.createProject}
             onClose={this.closeCreateProjectModal} />
         }
-      </div>
+      </li>
     );
   }
 }

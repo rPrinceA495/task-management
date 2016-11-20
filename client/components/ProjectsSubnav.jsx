@@ -22,6 +22,7 @@ const ButtonSubnav = withRouter(({ router }) =>
 
 const DropdownSubnav = withRouter(({ router }) =>
   <DropdownButton
+    id="projects-subnav-dropdown"
     bsStyle="primary"
     title={_.capitalize(
       Filters.All.find(filter => router.isActive(getPath(filter)))

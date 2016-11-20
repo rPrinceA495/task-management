@@ -1,0 +1,126 @@
+.projects-page-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.project-list {
+  margin-bottom: 20px;
+  padding-left: 0;
+}
+
+.project {
+  display: block;
+  border-bottom: 1px solid $gray-lighter;
+
+  &:first-child {
+    border-top: 1px solid $gray-lighter;
+  }
+}
+
+.project-header {
+  display: flex;
+  cursor: pointer;
+  color: $gray;
+  @include user-select(none);
+
+  &:hover,
+  &:focus {
+    color: lighten($state-info-text, 5%);
+    background-color: lighten($state-info-bg, 5%);
+  }
+}
+
+.project.expanded .project-header {
+  color: $state-info-text;
+  background-color: $state-info-bg;
+}
+
+.project-icon {
+  padding: 10px;
+  min-width: 34px;
+}
+
+.project-header-main {
+  flex: auto;
+  overflow: hidden;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  h4, p {
+    @include text-overflow();
+  }
+
+  h4 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+
+  p {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 0;
+  }
+}
+
+.project-body {
+  padding-top: 10px;
+  padding-left: 34px;
+  padding-bottom: 10px;
+  border-top: 1px solid $state-info-border;
+}
+
+.create-task-form {
+  display: flex;
+
+  button {
+    margin-left: 5px;
+  }
+}
+
+.task-list {
+  padding-left: 0;
+}
+
+.task {
+  display: flex;
+  border-bottom: 1px solid $gray-lighter;
+  color: $gray;
+
+  &:last-child {
+    border: none;
+  }
+}
+
+.task-icon {
+  font-size: 16px;
+  padding: 10px;
+  min-width: 36px;
+}
+
+.task-main {
+  flex: auto;
+  overflow: hidden;
+  padding: 10px;
+
+  h5, p {
+    @include text-overflow();
+  }
+
+  h5 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+
+  p {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 0;
+  }
+}
+
+.task-icon + .task-main {
+  padding-left: 0;
+}
