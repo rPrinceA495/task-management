@@ -4,7 +4,7 @@ import Icon from 'react-fa';
 
 export default class MenuToggle extends Component {
   static propTypes = {
-    onClick: PropTypes.func.isRequired,
+    onClick: PropTypes.func,
   };
 
   constructor(props) {
