@@ -68,5 +68,8 @@ export default {
       },
     ],
   },
+  resolve: {
+    extensions: ['.js', '.jsx', '.json'],
+  },
   plugins: getPlugins(),
 };
