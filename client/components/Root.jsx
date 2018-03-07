@@ -6,7 +6,7 @@ import Filters from '../constants/Filters';
 import App from './App.jsx';
 import Projects from './Projects.jsx';
 
-const history = useRouterHistory(createHashHistory)({ queryKey: false });
+const history = useRouterHistory(createHashHistory)();
 const Root = observer(props =>
   <Provider
     projectStore={props.projectStore}

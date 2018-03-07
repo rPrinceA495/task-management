@@ -29,20 +29,36 @@ export default {
     filename: getBundleName('js'),
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         include: [
           __dirname,
           path.join(__dirname, '../common'),
         ],
-        loader: 'babel',
+        loader: 'babel-loader',
       }, {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style', 'css'),
+        loader: ExtractTextPlugin.extract({
+          use: [{
+              loader: "css-loader"
+          }],
+        }),
       }, {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style', ['css', 'sass']),
+        loader: ExtractTextPlugin.extract({
+          use: [{
+            loader: "css-loader"
+          }, {
+            loader: "sass-loader",
+            options: {
+              precision: 8,
+              includePaths: [
+                path.join(__dirname, '../node_modules/bootstrap-sass/assets/stylesheets'),
+              ],
+            },
+          }],
+        }),
       }, {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'url-loader?limit=10000&minetype=application/font-woff',
@@ -53,10 +69,4 @@ export default {
     ],
   },
   plugins: getPlugins(),
-  sassLoader: {
-    precision: 8,
-    includePaths: [
-      path.join(__dirname, '../node_modules/bootstrap-sass/assets/stylesheets'),
-    ],
-  },
 };

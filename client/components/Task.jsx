@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
 import Icon from 'react-fa';
 import { Dropdown, MenuItem, SafeAnchor } from 'react-bootstrap';
@@ -9,7 +10,7 @@ import Statuses from '../constants/Statuses';
 @observer
 export default class Task extends React.Component {
   static propTypes = {
-    task: React.PropTypes.object.isRequired,
+    task: PropTypes.object.isRequired,
   };
 
   constructor(props) {
