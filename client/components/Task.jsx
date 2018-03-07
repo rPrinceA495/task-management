@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import Icon from 'react-fa';
 import { Dropdown, MenuItem, SafeAnchor } from 'react-bootstrap';
 import _ from 'lodash';
-import MenuToggle from './MenuToggle.jsx';
+import MenuToggle from './MenuToggle';
 import Statuses from '../constants/Statuses';
 
 @observer
@@ -50,6 +50,38 @@ export default class Task extends React.Component {
     }
   }
 
+  getMenuItems() {
+    const items = [];
+    if (!this.props.task.project.isTemplate) {
+      items.push(...this.getStatusMenuItems());
+      items.push(
+        <MenuItem
+          divider
+          key="divider" />
+      );
+    }
+    items.push(
+      <MenuItem
+        onClick={this.handleDeleteClick}
+        key="delete">
+        Delete
+      </MenuItem>
+    );
+    return items;
+  }
+
+  getStatusMenuItems() {
+    return Statuses.All
+      .filter(status => status !== this.props.task.status)
+      .map(status => (
+        <MenuItem
+          onClick={() => this.handleStatusClick(status)}
+          key={status}>
+          Mark as {_.capitalize(status)}
+        </MenuItem>
+      ));
+  }
+
   renderStatusIcon() {
     return (
       <SafeAnchor onClick={this.handleStatusIconClick}>
@@ -79,38 +111,6 @@ export default class Task extends React.Component {
         {/* <li><Icon name="calendar-o" /> Due date</li> */}
       </p>
     );
-  }
-
-  getMenuItems() {
-    const items = [];
-    if (!this.props.task.project.isTemplate) {
-      items.push(...this.getStatusMenuItems());
-      items.push(
-        <MenuItem
-          divider
-          key="divider" />
-      );
-    }
-    items.push(
-      <MenuItem
-        onClick={this.handleDeleteClick}
-        key="delete">
-        Delete
-      </MenuItem>
-    );
-    return items;
-  }
-
-  getStatusMenuItems() {
-    return Statuses.All
-      .filter(status => status !== this.props.task.status)
-      .map(status =>
-        <MenuItem
-          onClick={() => this.handleStatusClick(status)}
-          key={status}>
-          Mark as {_.capitalize(status)}
-        </MenuItem>
-      );
   }
 
   renderDropdown() {

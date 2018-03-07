@@ -41,16 +41,16 @@ export default {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract({
           use: [{
-              loader: "css-loader"
+            loader: 'css-loader',
           }],
         }),
       }, {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract({
           use: [{
-            loader: "css-loader"
+            loader: 'css-loader',
           }, {
-            loader: "sass-loader",
+            loader: 'sass-loader',
             options: {
               precision: 8,
               includePaths: [

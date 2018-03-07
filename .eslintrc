@@ -2,10 +2,23 @@
   "extends": "airbnb",
   "parser": "babel-eslint",
   "rules": {
-    "generator-star-spacing": 0,
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "always-multiline",
+      "exports": "always-multiline",
+      "functions": "ignore"
+    }],
+    "function-paren-newline": "off",
+    "arrow-parens": "off",
+    "object-curly-newline": "off",
+    "class-methods-use-this": "off",
+    "no-plusplus": "off",
+    "no-mixed-operators": "off",
+    "generator-star-spacing": "off",
     "no-param-reassign": ["error", { "props": false }],
-    "import/prefer-default-export": 0,
-    "no-console": 0,
+    "import/prefer-default-export": "off",
+    "no-console": "off",
     "import/no-extraneous-dependencies": [
       "error", {
         "devDependencies": true

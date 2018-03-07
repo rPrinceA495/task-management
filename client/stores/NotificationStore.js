@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import NotificationModel from '../models/NotificationModel'
+import NotificationModel from '../models/NotificationModel';
 
 const timeout = 3000;
 const defaultErrorMessage = 'An error occurred, please try again.';

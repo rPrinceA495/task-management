@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Icon from 'react-fa';
 
 export default class MenuToggle extends Component {
+  static propTypes = {
+    onClick: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
     this.handleClick = ::this.handleClick;

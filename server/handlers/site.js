@@ -1,9 +1,8 @@
 import path from 'path';
-import fs from 'mz/fs';
 import render from './render';
 
 const webpackManifest = process.env.NODE_ENV === 'production' ?
-  require('../../client/manifest.json') :
+  require('../../client/manifest.json') : // eslint-disable-line import/no-unresolved
   null;
 
 function getBundleName(extension) {

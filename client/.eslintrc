@@ -3,6 +3,18 @@
     "browser": true
   },
   "rules": {
-    "react/jsx-closing-bracket-location": [1, "after-props"]
+    "react/forbid-prop-types": "off",
+    "react/require-default-props": "off",
+    "react/no-array-index-key": "off",
+    "react/jsx-closing-bracket-location": ["error", "after-props"],
+    "react/sort-comp": ["error", {
+      "order": [
+        "static-methods",
+        "lifecycle",
+        "everything-else",
+        "/^render.+$/",
+        "render"
+      ]
+    }]
   }
 }

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import { Button } from 'react-bootstrap';
 import Icon from 'react-fa';
-import Project from './Project.jsx';
-import ProjectsSubnav from './ProjectsSubnav.jsx';
-import CreateProjectModal from './CreateProjectModal.jsx';
-import Loader from './Loader.jsx';
+import Project from './Project';
+import ProjectsSubnav from './ProjectsSubnav';
+import CreateProjectModal from './CreateProjectModal';
+import Loader from './Loader';
 
 @inject('projectStore')
 @observer
@@ -70,11 +70,11 @@ export default class Projects extends Component {
 
     return (
       <ul className="project-list">
-        {projectList.items.map(project =>
+        {projectList.items.map(project => (
           <Project
             key={project.id}
             project={project} />
-        )}
+        ))}
       </ul>
     );
   }

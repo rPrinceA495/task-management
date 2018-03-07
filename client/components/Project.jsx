@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
-import { Panel, Dropdown, MenuItem } from 'react-bootstrap';
+import { Dropdown, MenuItem } from 'react-bootstrap';
 import Icon from 'react-fa';
 import classNames from 'classnames';
 import _ from 'lodash';
-import Task from './Task.jsx';
-import CreateProjectModal from './CreateProjectModal.jsx';
-import CreateTaskForm from './CreateTaskForm.jsx';
-import MenuToggle from './MenuToggle.jsx';
+import Task from './Task';
+import CreateProjectModal from './CreateProjectModal';
+import CreateTaskForm from './CreateTaskForm';
+import MenuToggle from './MenuToggle';
 import Statuses from '../constants/Statuses';
 
 @inject('projectStore')
@@ -108,13 +108,13 @@ export default class Project extends Component {
   getStatusMenuItems() {
     return Statuses.All
       .filter(status => status !== this.props.project.status)
-      .map(status =>
+      .map(status => (
         <MenuItem
           onClick={event => this.handleStatusClick(event, status)}
           key={status}>
           Mark as {_.capitalize(status)}
         </MenuItem>
-      );
+      ));
   }
 
   renderDropdown() {
@@ -132,6 +132,7 @@ export default class Project extends Component {
 
   renderHeader() {
     return (
+      // eslint-disable-next-line
       <div
         onClick={this.handleProjectHeaderClick}
         className="project-header">
@@ -161,11 +162,11 @@ export default class Project extends Component {
       <div className="project-body">
         <CreateTaskForm onCreate={this.createTask} />
         <ul className="task-list">
-          {taskList.items.map(task =>
+          {taskList.items.map(task => (
             <Task
               task={task}
               key={task.id} />
-          )}
+          ))}
         </ul>
       </div>
     );

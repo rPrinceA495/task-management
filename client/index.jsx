@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import React from 'react';
 import { render } from 'react-dom';
-import Root from './components/Root.jsx';
+import Root from './components/Root';
 import ApiClient from '../common/api/ApiClient';
 import ProjectStore from './stores/ProjectStore';
 import NotificationStore from './stores/NotificationStore';
@@ -15,6 +15,6 @@ const projectStore = new ProjectStore(apiClient, notificationStore);
 render(
   <Root
     projectStore={projectStore}
-    notificationStore={notificationStore}/>,
+    notificationStore={notificationStore} />,
   document.getElementById('root')
 );

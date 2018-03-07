@@ -21,14 +21,14 @@ const Navbar = withRouter(({ router }) => {
       </Header>
       <Collapse>
         <Nav>
-          {navItems.map(item =>
+          {navItems.map(item => (
             <NavItem
               active={router.isActive(item.path)}
               href={router.createHref(item.path)}
               key={item.path}>
               {item.title}
             </NavItem>
-          )}
+          ))}
         </Nav>
       </Collapse>
     </BootstrapNavbar>

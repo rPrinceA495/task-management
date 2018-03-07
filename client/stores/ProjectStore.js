@@ -36,7 +36,7 @@ export default class ProjectStore {
       }));
       this.getProjectList(project).add(project);
     } catch (error) {
-      console.log('Error while creating project.' , error);
+      console.log('Error while creating project.', error);
       this.notificationStore.error();
     } finally {
       this.isCreatingProject = false;

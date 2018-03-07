@@ -7,39 +7,40 @@ import Filters from '../constants/Filters';
 
 const getPath = filter => `/projects/${filter}`;
 
-const ButtonSubnav = withRouter(({ router }) =>
+const ButtonSubnav = withRouter(({ router }) => (
   <ButtonGroup>
-    {Filters.All.map(filter =>
+    {Filters.All.map(filter => (
       <Button
         href={router.createHref(getPath(filter))}
         bsStyle={router.isActive(getPath(filter)) ? 'primary' : 'default'}
         key={filter}>
         {_.capitalize(filter)}
       </Button>
-    )}
+    ))}
   </ButtonGroup>
-);
+));
 
-const DropdownSubnav = withRouter(({ router }) =>
+const DropdownSubnav = withRouter(({ router }) => (
   <DropdownButton
     id="projects-subnav-dropdown"
     bsStyle="primary"
     title={_.capitalize(
       Filters.All.find(filter => router.isActive(getPath(filter)))
     )}>
-    {Filters.All.map(filter =>
+    {Filters.All.map(filter => (
       <MenuItem
         href={router.createHref(getPath(filter))}
         key={filter}>
         {_.capitalize(filter)}
       </MenuItem>
-    )}
+    ))}
   </DropdownButton>
-);
+));
 
-const ProjectsSubnav = () =>
+const ProjectsSubnav = () => (
   <Media query="(min-width: 768px)">
     {matches => (matches ? <ButtonSubnav /> : <DropdownSubnav />)}
-  </Media>;
+  </Media>
+);
 
 export default ProjectsSubnav;

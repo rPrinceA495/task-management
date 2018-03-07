@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormControl, Button } from 'react-bootstrap';
-import Icon from 'react-fa';
 
 export default class CreateTaskForm extends Component {
   static propTypes = {

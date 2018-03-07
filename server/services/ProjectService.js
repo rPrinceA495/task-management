@@ -4,7 +4,7 @@ import NotFoundError from '../../common/errors/NotFoundError';
 
 const ProjectService = {
   async createProject(project) {
-    return await db.execute(async (transaction) => {
+    return db.execute(async (transaction) => {
       let tasks = [];
 
       if (project.templateId) {
@@ -19,7 +19,7 @@ const ProjectService = {
         }));
       }
 
-      return await db.Project.create({
+      return db.Project.create({
         name: project.name,
         isTemplate: project.isTemplate,
         status: project.isTemplate ? null : 'active',
@@ -55,18 +55,18 @@ const ProjectService = {
   },
 
   async getProjects(options) {
-    return await db.Project.findAll(this.getProjectSearchOptions(options));
+    return db.Project.findAll(this.getProjectSearchOptions(options));
   },
 
   async createTask(projectId, task) {
-    return await db.execute(async (transaction) => {
+    return db.execute(async (transaction) => {
       const project = await this.getProject(projectId, {
         includeTasks: true,
         transaction,
       });
       // TODO: task.position
       const lastTask = _.maxBy(project.tasks, t => t.position);
-      return await db.Task.create({
+      return db.Task.create({
         projectId,
         name: task.name,
         position: lastTask ? lastTask.position + 1 : 1,
